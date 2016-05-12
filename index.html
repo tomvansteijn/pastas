@@ -44,6 +44,7 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to GWTSA&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#quick-installation-guide">Quick installation guide</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
@@ -77,19 +78,31 @@
             
   <div class="section" id="welcome-to-gwtsa-s-documentation">
 <h1>Welcome to GWTSA&#8217;s documentation!<a class="headerlink" href="#welcome-to-gwtsa-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>GWTSA is an open source python package for simulating time series in the field of
+hydrology. The object oriented stucture allows for the quick implementation of new
+model components. Time series models can be created, calibrated, and analysed with
+just a few lines of python code with the built-in optimization, visualisation, and
+statistical analysis tools.</p>
+<p>If you think you have found a bug in GWTSA, or if you would like to suggest an
+improvement or enhancement, please submit a new Issue through the Github Issue
+tracker toward the upper-right corner of the Github repository. Pull requests will
+only be accepted on the development branch (dev) of the repository.</p>
+</div>
+<div class="section" id="quick-installation-guide">
+<h1>Quick installation guide<a class="headerlink" href="#quick-installation-guide" title="Permalink to this headline">¶</a></h1>
+<p>To get the latest development version, use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>git clone http://github.com/gwtwa/gwtsa.git
+</pre></div>
+</div>
+<p>and install using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>python setup.py install
+</pre></div>
+</div>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
 </div>
-<span class="target" id="module-gwtsa"></span><dl class="class">
-<dt id="gwtsa.Tseries">
-<em class="property">class </em><code class="descclassname">gwtsa.</code><code class="descname">Tseries</code><span class="sig-paren">(</span><em>stress</em>, <em>rfunc</em>, <em>name</em>, <em>metadata=None</em>, <em>stressnames=None</em>, <em>xy=(0</em>, <em>0)</em>, <em>freq=None</em>, <em>fillna='mean'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Tseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.Tseries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Time series model consisting of the convolution of one stress with one
-response function.</p>
-<p class="rubric">Methods</p>
-</dd></dl>
-
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
