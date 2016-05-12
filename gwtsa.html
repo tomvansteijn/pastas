@@ -27,6 +27,11 @@
     <link rel="top" title="GWTSA 0.0.1 documentation" href="index.html" /> 
   </head>
   <body role="document">
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="index.html"><img src="_static/logo.png" border="0" alt="GWTSA Logo"/ height="100px"></a>
+</div>
+
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -36,15 +41,21 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">GWTSA 0.0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+       <li><a href="contents.html">documentation </a> &raquo;</li>
+ 
       </ul>
     </div>
+
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">gwtsa package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-gwtsa.checks">gwtsa.checks module</a></li>
 <li><a class="reference internal" href="#module-gwtsa.model">gwtsa.model module</a></li>
 <li><a class="reference internal" href="#module-gwtsa.rfunc">gwtsa.rfunc module</a></li>
 <li><a class="reference internal" href="#module-gwtsa.stats">gwtsa.stats module</a></li>
@@ -85,8 +96,51 @@
             
   <div class="section" id="gwtsa-package">
 <h1>gwtsa package<a class="headerlink" href="#gwtsa-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gwtsa.imports.html">gwtsa.imports package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports.dinodata">gwtsa.imports.dinodata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports.knmidata">gwtsa.imports.knmidata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gwtsa.checks">
+<span id="gwtsa-checks-module"></span><h2>gwtsa.checks module<a class="headerlink" href="#module-gwtsa.checks" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="gwtsa.checks.check_oseries">
+<code class="descclassname">gwtsa.checks.</code><code class="descname">check_oseries</code><span class="sig-paren">(</span><em>oseries</em>, <em>freq</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/checks.html#check_oseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.checks.check_oseries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gwtsa.checks.check_tseries">
+<code class="descclassname">gwtsa.checks.</code><code class="descname">check_tseries</code><span class="sig-paren">(</span><em>stress</em>, <em>freq</em>, <em>fillna</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/checks.html#check_tseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.checks.check_tseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the stress series on missing values and constant frequency.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of stresses:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Checked for Missing values</li>
+<li>Checked for frequency of stress</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="module-gwtsa.model">
 <span id="gwtsa-model-module"></span><h2>gwtsa.model module<a class="headerlink" href="#module-gwtsa.model" title="Permalink to this headline">¶</a></h2>
@@ -557,7 +611,10 @@ one response function.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">GWTSA 0.0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+       <li><a href="contents.html">documentation </a> &raquo;</li>
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

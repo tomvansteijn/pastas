@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to GWTSA's documentation!
-=================================
+GWTSA Introduction
+==================
 GWTSA is an open source python package for simulating time series in the field of
 hydrology. The object oriented stucture allows for the quick implementation of new
 model components. Time series models can be created, calibrated, and analysed with
@@ -26,11 +26,6 @@ and install using::
 
    python setup.py install
 
-
-Contents:
-
-.. toctree::
-   :maxdepth: 2
 
 Indices and tables
 ==================

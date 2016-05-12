@@ -1,8 +1,7 @@
-gwtsa-master
-============
+gwtsa
+=====
 
 .. toctree::
    :maxdepth: 4
 
    gwtsa
-   setup
