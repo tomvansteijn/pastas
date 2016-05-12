@@ -28,9 +28,10 @@
   </head>
   <body role="document">
 
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<div class="header">
 <a href="index.html"><img src="_static/logo.png" border="0" alt="GWTSA Logo" height="100px"></a>
 </div>
+
 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -49,6 +50,8 @@
  
       </ul>
     </div>
+
+
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
@@ -107,6 +110,15 @@
 <li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports.dinodata">gwtsa.imports.dinodata module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports.knmidata">gwtsa.imports.knmidata module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gwtsa.recharge.html">gwtsa.recharge package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#gwtsa-recharge-cythonize-module">gwtsa.recharge.cythonize module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#module-gwtsa.recharge.recharge">gwtsa.recharge.recharge module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#id1">gwtsa.recharge.recharge module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#module-gwtsa.recharge.recharge_func">gwtsa.recharge.recharge_func module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#module-gwtsa.recharge">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -556,6 +568,26 @@ one response function.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="gwtsa.tseries.Tseries3">
+<em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">Tseries3</code><span class="sig-paren">(</span><em>stress</em>, <em>rfunc</em>, <em>recharge</em>, <em>name</em>, <em>metadata=None</em>, <em>stressnames=None</em>, <em>xy=(0</em>, <em>0)</em>, <em>freq=None</em>, <em>fillna='mean'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Tseries3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Tseries3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwtsa.tseries.TseriesBase" title="gwtsa.tseries.TseriesBase"><code class="xref py py-class docutils literal"><span class="pre">gwtsa.tseries.TseriesBase</span></code></a></p>
+<p>Time series model consisting of a recharge model to calculate the recharge
+convoluted with a response function.</p>
+<p>The recharge model has to be provided.</p>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="gwtsa.tseries.Tseries3.set_init_parameters">
+<code class="descname">set_init_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Tseries3.set_init_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Tseries3.set_init_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwtsa.tseries.Tseries3.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>tindex=None</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Tseries3.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Tseries3.simulate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="gwtsa.tseries.TseriesBase">
 <em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">TseriesBase</code><span class="sig-paren">(</span><em>stress</em>, <em>rfunc</em>, <em>name</em>, <em>stressnames</em>, <em>xy</em>, <em>metadata</em>, <em>freq</em>, <em>fillna</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#TseriesBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.TseriesBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tseries Base class called by each Tseries object.</p>
@@ -588,6 +620,11 @@ one response function.</p>
 <dd></dd></dl>
 
 </dd></dl>
+
+<dl class="function">
+<dt id="gwtsa.tseries.simulate_recharge">
+<code class="descclassname">gwtsa.tseries.</code><code class="descname">simulate_recharge</code><span class="sig-paren">(</span><em>self</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#simulate_recharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.simulate_recharge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-gwtsa.version">
