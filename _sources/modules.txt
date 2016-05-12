@@ -1,4 +1,4 @@
-gwtsa
+Code Documentation
 =====
 
 .. toctree::
