@@ -568,26 +568,6 @@ one response function.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="gwtsa.tseries.Tseries3">
-<em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">Tseries3</code><span class="sig-paren">(</span><em>stress</em>, <em>rfunc</em>, <em>recharge</em>, <em>name</em>, <em>metadata=None</em>, <em>stressnames=None</em>, <em>xy=(0</em>, <em>0)</em>, <em>freq=None</em>, <em>fillna='mean'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Tseries3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Tseries3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#gwtsa.tseries.TseriesBase" title="gwtsa.tseries.TseriesBase"><code class="xref py py-class docutils literal"><span class="pre">gwtsa.tseries.TseriesBase</span></code></a></p>
-<p>Time series model consisting of a recharge model to calculate the recharge
-convoluted with a response function.</p>
-<p>The recharge model has to be provided.</p>
-<p class="rubric">Methods</p>
-<dl class="method">
-<dt id="gwtsa.tseries.Tseries3.set_init_parameters">
-<code class="descname">set_init_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Tseries3.set_init_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Tseries3.set_init_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="gwtsa.tseries.Tseries3.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>tindex=None</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Tseries3.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Tseries3.simulate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="gwtsa.tseries.TseriesBase">
 <em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">TseriesBase</code><span class="sig-paren">(</span><em>stress</em>, <em>rfunc</em>, <em>name</em>, <em>stressnames</em>, <em>xy</em>, <em>metadata</em>, <em>freq</em>, <em>fillna</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#TseriesBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.TseriesBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tseries Base class called by each Tseries object.</p>
@@ -597,6 +577,26 @@ convoluted with a response function.</p>
 <code class="descname">set_parameters</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#TseriesBase.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.TseriesBase.set_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to set the parameters value</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwtsa.tseries.TseriesRecharge">
+<em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">TseriesRecharge</code><span class="sig-paren">(</span><em>stress</em>, <em>rfunc</em>, <em>recharge</em>, <em>name</em>, <em>metadata=None</em>, <em>stressnames=None</em>, <em>xy=(0</em>, <em>0)</em>, <em>freq=None</em>, <em>fillna='mean'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#TseriesRecharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.TseriesRecharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwtsa.tseries.TseriesBase" title="gwtsa.tseries.TseriesBase"><code class="xref py py-class docutils literal"><span class="pre">gwtsa.tseries.TseriesBase</span></code></a></p>
+<p>Time series model consisting of a recharge model to calculate the recharge
+convoluted with a response function.</p>
+<p>The recharge model has to be provided.</p>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="gwtsa.tseries.TseriesRecharge.set_init_parameters">
+<code class="descname">set_init_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#TseriesRecharge.set_init_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.TseriesRecharge.set_init_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwtsa.tseries.TseriesRecharge.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>tindex=None</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#TseriesRecharge.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.TseriesRecharge.simulate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
