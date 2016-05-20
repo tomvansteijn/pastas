@@ -27,11 +27,9 @@
     <link rel="top" title="GWTSA 0.0.1 documentation" href="index.html" /> 
   </head>
   <body role="document">
-
 <div class="header">
 <a href="index.html"><img src="_static/logo.png" border="0" alt="GWTSA Logo" height="100px"></a>
 </div>
-
 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -39,9 +37,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
         <li><a href="examples.html">examples</a>|&nbsp;
@@ -51,8 +46,18 @@
       </ul>
     </div>
 
-
-
+<div class="sidebar">
+      <div class="sphinxsidebar">
+          <div class="sphinxsidebarwrapper">
+              <h3><a href="#">Project Info</a></h3>
+              <p>Version:<b> 0.0.1 </b></p>
+              <a href="https://travis-ci.org/gwtsa/gwtsa"><img
+        src="https://travis-ci.org/gwtsa/gwtsa.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a>
+          </div>
+      </div>
+    
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
@@ -60,10 +65,10 @@
 <li><a class="reference internal" href="#">gwtsa.recharge package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#gwtsa-recharge-cythonize-module">gwtsa.recharge.cythonize module</a></li>
-<li><a class="reference internal" href="#module-gwtsa.recharge.recharge">gwtsa.recharge.recharge module</a></li>
+<li><a class="reference internal" href="#gwtsa-recharge-recharge-module">gwtsa.recharge.recharge module</a></li>
 <li><a class="reference internal" href="#id1">gwtsa.recharge.recharge module</a></li>
-<li><a class="reference internal" href="#module-gwtsa.recharge.recharge_func">gwtsa.recharge.recharge_func module</a></li>
-<li><a class="reference internal" href="#module-gwtsa.recharge">Module contents</a></li>
+<li><a class="reference internal" href="#gwtsa-recharge-recharge-func-module">gwtsa.recharge.recharge_func module</a></li>
+<li><a class="reference internal" href="#module-contents">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -90,6 +95,8 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
+</div>
+
 
     <div class="document">
       <div class="documentwrapper">
@@ -104,198 +111,17 @@
 <div class="section" id="gwtsa-recharge-cythonize-module">
 <h2>gwtsa.recharge.cythonize module<a class="headerlink" href="#gwtsa-recharge-cythonize-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-gwtsa.recharge.recharge">
-<span id="gwtsa-recharge-recharge-module"></span><h2>gwtsa.recharge.recharge module<a class="headerlink" href="#module-gwtsa.recharge.recharge" title="Permalink to this headline">¶</a></h2>
-<p>Created on Wed Apr 15 18:20:35 2015</p>
-<p>This python script is used to solve the differential equations that are used for the
-unsaturated zone module. The output of the function is the soil state (how full
-it is) at each timestep, and the groundwater recharge N.</p>
-<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-Three models can be used:
-- Percolation Flow:
-dS/dt = Pe[t] - Kp * (Sr/Srmax)**Gamma - Epu * min(1, Sr/0.5Srmax)</p>
-<ul class="simple">
-<li>Preferential Flow:</li>
-</ul>
-<p>dS/ Dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta)- Epu * min(1, Sr/0.5Srmax)</p>
-<ul class="simple">
-<li>Combination:</li>
-</ul>
-<dl class="docutils">
-<dt>dS/ Dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta) - Kp * (Sr/Srmax)**Gamma - Epu</dt>
-<dd><ul class="first last simple">
-<li>min(1, Sr/0.5*Srmax)</li>
-</ul>
-</dd>
-</dl>
-<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-Numerical info:
-The Soil module is solved with an implicit euler and Newton Raphson iteration.
-The initial estimate for the the NR-iteration is provided by an Explicit Euler
-solution of the above differential equation.</p>
-<dl class="docutils">
-<dt>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-To Do:</dt>
-<dd><ul class="first last simple">
-<li>Built in more external / internal checks for water balance</li>
-</ul>
-</dd>
-</dl>
-<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-References:     
-- Kavetski, D., Kuczera, G. &amp; Franks, S.W. [2006]. Calibration of conceptual
-hydrological models revisited: 1. Overcoming numerical artefacts.
-Journal of Hydrology, 320, p. 173-186.</p>
-<p>&#64;author: Raoul Collenteur</p>
-<dl class="function">
-<dt id="gwtsa.recharge.recharge.comb">
-<code class="descclassname">gwtsa.recharge.recharge.</code><code class="descname">comb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gwtsa.recharge.recharge.comb" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="gwtsa.recharge.recharge.perc">
-<code class="descclassname">gwtsa.recharge.recharge.</code><code class="descname">perc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gwtsa.recharge.recharge.perc" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="gwtsa.recharge.recharge.pref">
-<code class="descclassname">gwtsa.recharge.recharge.</code><code class="descname">pref</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gwtsa.recharge.recharge.pref" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<div class="section" id="gwtsa-recharge-recharge-module">
+<h2>gwtsa.recharge.recharge module<a class="headerlink" href="#gwtsa-recharge-recharge-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="id1">
 <h2>gwtsa.recharge.recharge module<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-gwtsa.recharge.recharge"></span><p>Created on Wed Apr 15 18:20:35 2015</p>
-<p>This python script is used to solve the differential equations that are used for the
-unsaturated zone module. The output of the function is the soil state (how full
-it is) at each timestep, and the groundwater recharge N.</p>
-<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-Three models can be used:
-- Percolation Flow:
-dS/dt = Pe[t] - Kp * (Sr/Srmax)**Gamma - Epu * min(1, Sr/0.5Srmax)</p>
-<ul class="simple">
-<li>Preferential Flow:</li>
-</ul>
-<p>dS/ Dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta)- Epu * min(1, Sr/0.5Srmax)</p>
-<ul class="simple">
-<li>Combination:</li>
-</ul>
-<dl class="docutils">
-<dt>dS/ Dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta) - Kp * (Sr/Srmax)**Gamma - Epu</dt>
-<dd><ul class="first last simple">
-<li>min(1, Sr/0.5*Srmax)</li>
-</ul>
-</dd>
-</dl>
-<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-Numerical info:
-The Soil module is solved with an implicit euler and Newton Raphson iteration.
-The initial estimate for the the NR-iteration is provided by an Explicit Euler
-solution of the above differential equation.</p>
-<dl class="docutils">
-<dt>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-To Do:</dt>
-<dd><ul class="first last simple">
-<li>Built in more external / internal checks for water balance</li>
-</ul>
-</dd>
-</dl>
-<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-References:     
-- Kavetski, D., Kuczera, G. &amp; Franks, S.W. [2006]. Calibration of conceptual
-hydrological models revisited: 1. Overcoming numerical artefacts.
-Journal of Hydrology, 320, p. 173-186.</p>
-<p>&#64;author: Raoul Collenteur</p>
-<dl class="function">
-<dt>
-<code class="descclassname">gwtsa.recharge.recharge.</code><code class="descname">comb</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt>
-<code class="descclassname">gwtsa.recharge.recharge.</code><code class="descname">perc</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt>
-<code class="descclassname">gwtsa.recharge.recharge.</code><code class="descname">pref</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
 </div>
-<div class="section" id="module-gwtsa.recharge.recharge_func">
-<span id="gwtsa-recharge-recharge-func-module"></span><h2>gwtsa.recharge.recharge_func module<a class="headerlink" href="#module-gwtsa.recharge.recharge_func" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="gwtsa.recharge.recharge_func.Combination">
-<em class="property">class </em><code class="descclassname">gwtsa.recharge.recharge_func.</code><code class="descname">Combination</code><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Combination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Combination" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combination flow recharge model</p>
-<p>Other water balance for the root zone is calculated as:</p>
-<p>dS/ dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta) - Kp * (Sr / Srmax)**Gamma -
-Epu * min(1, Sr/ (0.5 * Srmax))</p>
-<p class="rubric">Methods</p>
-<dl class="method">
-<dt id="gwtsa.recharge.recharge_func.Combination.set_parameters">
-<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Combination.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Combination.set_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="gwtsa.recharge.recharge_func.Combination.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>precipitation</em>, <em>evaporation</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Combination.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Combination.simulate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="gwtsa.recharge.recharge_func.Linear">
-<em class="property">class </em><code class="descclassname">gwtsa.recharge.recharge_func.</code><code class="descname">Linear</code><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Linear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Linear recharge model</p>
-<p>The recharge to the groundwater is calculated as:
-R = P - f * E</p>
-<p class="rubric">Methods</p>
-<dl class="method">
-<dt id="gwtsa.recharge.recharge_func.Linear.set_parameters">
-<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Linear.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Linear.set_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="gwtsa.recharge.recharge_func.Linear.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>precipitation</em>, <em>evaporation</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Linear.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Linear.simulate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="gwtsa.recharge.recharge_func.Percolation">
-<em class="property">class </em><code class="descclassname">gwtsa.recharge.recharge_func.</code><code class="descname">Percolation</code><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Percolation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Percolation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Percolation flow recharge model</p>
-<p>Other water balance for the root zone s calculated as:</p>
-<p>dS/dt = Pe - Kp * (Sr / Srmax)**Gamma - Epu * min(1, Sr / (0.5 * Srmax))</p>
-<p class="rubric">Methods</p>
-<dl class="method">
-<dt id="gwtsa.recharge.recharge_func.Percolation.set_parameters">
-<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Percolation.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Percolation.set_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="gwtsa.recharge.recharge_func.Percolation.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>precipitation</em>, <em>evaporation</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Percolation.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Percolation.simulate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="gwtsa.recharge.recharge_func.Preferential">
-<em class="property">class </em><code class="descclassname">gwtsa.recharge.recharge_func.</code><code class="descname">Preferential</code><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Preferential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Preferential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preferential flow recharge model</p>
-<p>The water balance for the root zone is calculated as:
-dS / dt = Pe * (1 - (Sr / Srmax)**Beta)- Epu * min(1, Sr / (0.5 * Srmax))</p>
-<p class="rubric">Methods</p>
-<dl class="method">
-<dt id="gwtsa.recharge.recharge_func.Preferential.set_parameters">
-<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Preferential.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Preferential.set_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="gwtsa.recharge.recharge_func.Preferential.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>precipitation</em>, <em>evaporation</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Preferential.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Preferential.simulate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="gwtsa-recharge-recharge-func-module">
+<h2>gwtsa.recharge.recharge_func module<a class="headerlink" href="#gwtsa-recharge-recharge-func-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-gwtsa.recharge">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gwtsa.recharge" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -303,6 +129,7 @@ dS / dt = Pe * (1 - (Sr / Srmax)**Beta)- Epu * min(1, Sr / (0.5 * Srmax))</p>
           </div>
         </div>
       </div>
+
       <div class="clearer"></div>
     </div>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -311,9 +138,6 @@ dS / dt = Pe * (1 - (Sr / Srmax)**Beta)- Epu * min(1, Sr / (0.5 * Srmax))</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
         <li><a href="examples.html">examples</a>|&nbsp;
