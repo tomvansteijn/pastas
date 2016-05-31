@@ -38,6 +38,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../search.html">search</a>|&nbsp;</li>
         <li><a href="../../examples.html">examples</a>|&nbsp;
@@ -86,13 +89,31 @@
           <div class="body" role="main">
             
   <h1>Source code for gwtsa.checks</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
 
 <div class="viewcode-block" id="check_oseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.checks.check_oseries">[docs]</a><span class="k">def</span> <span class="nf">check_oseries</span><span class="p">(</span><span class="n">oseries</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check the observed time series before running a simulation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    oseries: pd.Series</span>
+<span class="sd">        Pandas series object containing the observed time series.</span>
+<span class="sd">    freq: str</span>
+<span class="sd">        String containing the desired frequency. The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    oseries: pd.Series</span>
+<span class="sd">        Pandas series object check for nan-values and with the required frequency.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">oseries</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">),</span> <span class="s1">&#39;Expected a Pandas Series object, &#39;</span> \
                                            <span class="s1">&#39;got </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">oseries</span><span class="p">)</span>
+    <span class="c1"># make a deep copy to preserve original imported data</span>
+    <span class="n">oseries</span> <span class="o">=</span> <span class="n">oseries</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="c1"># Deal with frequency of the time series</span>
     <span class="k">if</span> <span class="n">freq</span><span class="p">:</span>
         <span class="n">oseries</span> <span class="o">=</span> <span class="n">oseries</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
@@ -101,43 +122,51 @@
     <span class="k">return</span> <span class="n">oseries</span>
 
 </div>
-<div class="viewcode-block" id="check_tseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.checks.check_tseries">[docs]</a><span class="k">def</span> <span class="nf">check_tseries</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillna</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Check the stress series on missing values and constant frequency.</span>
+<div class="viewcode-block" id="check_tseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.checks.check_tseries">[docs]</a><span class="k">def</span> <span class="nf">check_tseries</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Check the stress series before running a simulation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tseries: pd.Series</span>
+<span class="sd">        Pandas series object containing the stress time series.</span>
+<span class="sd">    freq: str</span>
+<span class="sd">        String containing the desired frequency. The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+<span class="sd">    fillnan: optional: str or float</span>
+<span class="sd">        Methods or float number to fill nan-values. Default values is</span>
+<span class="sd">        &#39;mean&#39;. Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">        and &#39;mean&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">        interpolation.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    list of stresses:</span>
+<span class="sd">    the corrected stress as pd.Series:</span>
 <span class="sd">        - Checked for Missing values</span>
 <span class="sd">        - Checked for frequency of stress</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">stress</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-        <span class="n">stress</span> <span class="o">=</span> <span class="p">[</span><span class="n">stress</span><span class="p">]</span>
-    <span class="n">stresses</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">stress</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">),</span> <span class="s1">&#39;Expected a Pandas Series, &#39;</span> \
-                                         <span class="s1">&#39;got </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-        <span class="c1"># Deal with frequency of the stress series</span>
-        <span class="k">if</span> <span class="n">freq</span><span class="p">:</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">freq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">infer_freq</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">),</span> <span class="s1">&#39;Expected a Pandas Series, &#39;</span> \
+                                          <span class="s1">&#39;got </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">stress</span><span class="p">)</span>
+    <span class="c1"># Deal with frequency of the stress series</span>
+    <span class="k">if</span> <span class="n">freq</span><span class="p">:</span>
+        <span class="n">stress</span> <span class="o">=</span> <span class="n">stress</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">infer_freq</span><span class="p">(</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">stress</span> <span class="o">=</span> <span class="n">stress</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
 
-        <span class="c1"># Deal with nan-values in stress series</span>
-        <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">hasnans</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s1">&#39;</span><span class="si">%i</span><span class="s1"> nan-value(s) was/were found and filled with: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">k</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">fillna</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">fillna</span> <span class="o">==</span> <span class="s1">&#39;interpolate&#39;</span><span class="p">:</span>
-                <span class="n">k</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">fillna</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
-                <span class="k">print</span> <span class="n">fillna</span><span class="p">,</span> <span class="s1">&#39;init&#39;</span>
-                <span class="n">k</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">fillna</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">k</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># Default option</span>
-        <span class="n">stresses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">stresses</span></div>
+    <span class="c1"># Deal with nan-values in stress series</span>
+    <span class="k">if</span> <span class="n">stress</span><span class="o">.</span><span class="n">hasnans</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s1">&#39;</span><span class="si">%i</span><span class="s1"> nan-value(s) was/were found and filled with: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">stress</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">fillnan</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fillnan</span> <span class="o">==</span> <span class="s1">&#39;interpolate&#39;</span><span class="p">:</span>
+            <span class="n">stress</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">fillnan</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">fillnan</span><span class="p">,</span> <span class="s1">&#39;init&#39;</span>
+            <span class="n">stress</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">fillnan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stress</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">stress</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># Default option</span>
+    <span class="k">return</span> <span class="n">stress</span></div>
 </pre></div>
 
           </div>
@@ -152,6 +181,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../search.html">search</a>|&nbsp;</li>
         <li><a href="../../examples.html">examples</a>|&nbsp;

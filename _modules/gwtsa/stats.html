@@ -38,6 +38,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../search.html">search</a>|&nbsp;</li>
         <li><a href="../../examples.html">examples</a>|&nbsp;
@@ -130,13 +133,14 @@
 <span class="sd">    r_corrected</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ml</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">ml</span><span class="o">.</span><span class="n">fit</span><span class="o">.</span><span class="n">success</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">True</span><span class="p">:</span>
             <span class="s1">&#39;Model optimization was not succesfull, make sure the model is solved&#39;</span> \
             <span class="s1">&#39;Properly.&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">oseries</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">oseries</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">oseries</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">odelt</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">odelt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">innovations</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">noisemodel</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">odelt</span><span class="p">)</span>
@@ -148,7 +152,7 @@
 <span class="sd">        rmse = sqrt(sum(residuals**2) / N)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Statistics.avg_dev"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.avg_dev">[docs]</a>    <span class="k">def</span> <span class="nf">avg_dev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Average deviation of the residuals.</span>
@@ -179,8 +183,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">RSS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
-        <span class="n">TSS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">oseries</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">)</span> <span class="o">*</span> <span class="n">RSS</span> <span class="o">/</span> <span class="n">TSS</span>
+        <span class="n">TSS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">oseries</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">)</span> <span class="o">*</span> <span class="n">RSS</span> <span class="o">/</span> <span class="n">TSS</span>
 </div>
 <div class="viewcode-block" id="Statistics.bic"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.bic">[docs]</a>    <span class="k">def</span> <span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Bayesian Information Criterium</span>
@@ -192,7 +196,7 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">bic</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">innovations</span><span class="o">**</span><span class="mf">2.0</span><span class="p">))</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+        <span class="n">bic</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">innovations</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">bic</span>
 </div>
@@ -206,7 +210,7 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">aic</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">innovations</span><span class="o">**</span><span class="mf">2.0</span><span class="p">))</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span>
+        <span class="n">aic</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">innovations</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span>
         <span class="k">return</span> <span class="n">aic</span>
 </div>
 <div class="viewcode-block" id="Statistics.acf"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.acf">[docs]</a>    <span class="k">def</span> <span class="nf">acf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
@@ -250,19 +254,17 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="n">probplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">innovations</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-
 </div>
 <div class="viewcode-block" id="Statistics.summary"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;basic&#39;</span><span class="p">):</span>
-        <span class="n">basic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;evp&#39;</span> <span class="p">:</span> <span class="s1">&#39;Explained variance percentage&#39;</span><span class="p">,</span> <span class="s1">&#39;rmse&#39;</span> <span class="p">:</span> <span class="s1">&#39;Root mean &#39;</span>
-                                                                   <span class="s1">&#39;squared error&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;avg_dev&#39;</span> <span class="p">:</span> <span class="s1">&#39;Average Deviation&#39;</span><span class="p">,</span> <span class="s1">&#39;pearson&#39;</span> <span class="p">:</span> <span class="s1">&#39;Pearson R^2&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;bic&#39;</span> <span class="p">:</span> <span class="s1">&#39;Bayesian Information Criterion&#39;</span><span class="p">,</span> <span class="s1">&#39;aic&#39;</span> <span class="p">:</span> <span class="s1">&#39;Akaike &#39;</span>
-                                                                   <span class="s1">&#39;Information &#39;</span>
-                                                                   <span class="s1">&#39;Criterion&#39;</span><span class="p">}</span>
-        <span class="n">stats</span> <span class="o">=</span><span class="p">[]</span>
-        <span class="n">statsvalue</span> <span class="o">=</span><span class="p">[]</span>
-        <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Statistic:&#39;</span><span class="p">,</span><span class="s1">&#39;Value&#39;</span><span class="p">]</span>
+        <span class="n">basic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;evp&#39;</span><span class="p">:</span> <span class="s1">&#39;Explained variance percentage&#39;</span><span class="p">,</span> <span class="s1">&#39;rmse&#39;</span><span class="p">:</span> <span class="s1">&#39;Root mean &#39;</span>
+                                                                 <span class="s1">&#39;squared error&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;avg_dev&#39;</span><span class="p">:</span> <span class="s1">&#39;Average Deviation&#39;</span><span class="p">,</span> <span class="s1">&#39;pearson&#39;</span><span class="p">:</span> <span class="s1">&#39;Pearson R^2&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;bic&#39;</span><span class="p">:</span> <span class="s1">&#39;Bayesian Information Criterion&#39;</span><span class="p">,</span> <span class="s1">&#39;aic&#39;</span><span class="p">:</span> <span class="s1">&#39;Akaike &#39;</span>
+                                                                 <span class="s1">&#39;Information &#39;</span>
+                                                                 <span class="s1">&#39;Criterion&#39;</span><span class="p">}</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">statsvalue</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Statistic:&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="s1">&#39;basic&#39;</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">basic</span><span class="p">:</span>
                 <span class="n">stats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basic</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
@@ -282,6 +284,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../search.html">search</a>|&nbsp;</li>
         <li><a href="../../examples.html">examples</a>|&nbsp;
