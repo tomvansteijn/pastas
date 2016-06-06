@@ -98,8 +98,33 @@
 
 
 <div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oseries</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span> <span class="o">=</span> <span class="n">check_oseries</span><span class="p">(</span><span class="n">oseries</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oseries</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">fillnan</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiates a time series model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        oseries: pd.Series</span>
+<span class="sd">            pandas Series object containing the dependent time series. The</span>
+<span class="sd">            observation can be non-equidistant.</span>
+<span class="sd">        xy: Optional[tuple]</span>
+<span class="sd">            XY location of the oseries in lat-lon format.</span>
+<span class="sd">        metadata: Optional[dict]</span>
+<span class="sd">            Dictionary containing metadata of the model.</span>
+<span class="sd">        freq: Optional[str]</span>
+<span class="sd">            String containing the desired frequency. By default freq=None and the</span>
+<span class="sd">            observations are used as they are. The required string format is found</span>
+<span class="sd">            at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">            -aliases</span>
+<span class="sd">        fillnan: Optional[str or float]</span>
+<span class="sd">            Methods or float number to fill nan-values. Default values is</span>
+<span class="sd">            &#39;drop&#39;. Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">            &#39;mean&#39; and, &#39;drop&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">            interpolation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span> <span class="o">=</span> <span class="n">check_oseries</span><span class="p">(</span><span class="n">oseries</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="n">xy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">odelt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">)</span>
@@ -108,12 +133,35 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="o">=</span> <span class="bp">None</span>
 
 <div class="viewcode-block" id="Model.addtseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model.addtseries">[docs]</a>    <span class="k">def</span> <span class="nf">addtseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tseries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a time series model component to the Model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tserieslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tseries</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Model.addnoisemodel"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model.addnoisemodel">[docs]</a>    <span class="k">def</span> <span class="nf">addnoisemodel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noisemodel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a noise model to the time series Model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="o">=</span> <span class="n">noisemodel</span>
 </div>
-<div class="viewcode-block" id="Model.simulate"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Model.simulate"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t: Optional[pd.series.index]</span>
+<span class="sd">            Time indices to use for the simulation of the time series model.</span>
+<span class="sd">        p: Optional[array]</span>
+<span class="sd">            Array of the parameters used in the time series model.</span>
+<span class="sd">        noise:</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pandas Series object containing the simulated time series.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span>
         <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -127,6 +175,10 @@
 </div>
 <div class="viewcode-block" id="Model.residuals"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model.residuals">[docs]</a>    <span class="k">def</span> <span class="nf">residuals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">solvemethod</span><span class="o">=</span><span class="s1">&#39;lmfit&#39;</span><span class="p">,</span>
                   <span class="n">noise</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that is called by the solve fucntion to calculate the residuals.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -146,19 +198,40 @@
 </div>
 <div class="viewcode-block" id="Model.solve"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">solvemethod</span><span class="o">=</span><span class="s1">&#39;lmfit&#39;</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
               <span class="n">noise</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Methods to solve the time series model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tmin: Optional[str]</span>
+<span class="sd">            String with a start date for the simulation period (E.g. &#39;1980&#39;)</span>
+<span class="sd">        tmax: Optional[str]</span>
+<span class="sd">            String with an end date for the simulation period (E.g. &#39;2010&#39;)</span>
+<span class="sd">        solvemethod: Optional[str]</span>
+<span class="sd">            Methods used to solve the time series model. Only &#39;lmfit&#39; is currently</span>
+<span class="sd">            supported.</span>
+<span class="sd">        report: Boolean</span>
+<span class="sd">            Print a report to the screen after optimization finished.</span>
+<span class="sd">        noise: Boolean</span>
+<span class="sd">            Use the nose model (True) or not (False).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">noise</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
             <span class="k">print</span> <span class="s1">&#39;Warning, solution with noise model while noise model is not &#39;</span> \
                   <span class="s1">&#39;defined. No noise model is used&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">solvemethod</span> <span class="o">=</span> <span class="n">solvemethod</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">nparam</span> <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tserieslist</span><span class="p">)</span>
+
+        <span class="c1"># Initialize parameters</span>
+        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solvemethod</span> <span class="o">==</span> <span class="s1">&#39;lmfit&#39;</span><span class="p">:</span>
             <span class="n">parameters</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tserieslist</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
                     <span class="n">p</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-                    <span class="n">pvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="bp">None</span><span class="p">,</span>
-                                       <span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>  <span class="c1"># needed because lmfit doesn&#39;t</span>
-                    <span class="c1"># take nan as input</span>
+                    <span class="c1"># needed because lmfit doesn&#39;t take nan as input</span>
+                    <span class="n">pvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="bp">None</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
                     <span class="n">parameters</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">pvalues</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">min</span><span class="o">=</span><span class="n">pvalues</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                                    <span class="nb">max</span><span class="o">=</span><span class="n">pvalues</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vary</span><span class="o">=</span><span class="n">pvalues</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -185,6 +258,18 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paramdict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="Model.plot"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oseries</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        oseries: Boolean</span>
+<span class="sd">            True to plot the observed time series.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Plot of the simulated and optionally the observed time series</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -193,7 +278,19 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Model.plot_results"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.model.Model.plot_results">[docs]</a>    <span class="k">def</span> <span class="nf">plot_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s1">&#39;Model Results&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        savefig: Optional[Boolean]</span>
+<span class="sd">            True to save the figure, False is default. Figure is saved in the</span>
+<span class="sd">            current working directory when running your python scripts.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s1">&#39;Model Results&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
         <span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
         <span class="c1"># Plot the Groundwater levels</span>
         <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>

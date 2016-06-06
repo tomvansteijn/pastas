@@ -70,7 +70,12 @@
 <li><a class="reference internal" href="#gwtsa-recharge-cythonize-module">gwtsa.recharge.cythonize module</a></li>
 <li><a class="reference internal" href="#module-gwtsa.recharge.recharge">gwtsa.recharge.recharge module</a></li>
 <li><a class="reference internal" href="#id1">gwtsa.recharge.recharge module</a></li>
-<li><a class="reference internal" href="#module-gwtsa.recharge.recharge_func">gwtsa.recharge.recharge_func module</a></li>
+<li><a class="reference internal" href="#module-gwtsa.recharge.recharge_func">gwtsa.recharge.recharge_func module</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-gwtsa.recharge">Module contents</a></li>
 </ul>
 </li>
@@ -152,6 +157,34 @@
 </div>
 <div class="section" id="module-gwtsa.recharge.recharge_func">
 <span id="gwtsa-recharge-recharge-func-module"></span><h2>gwtsa.recharge.recharge_func module<a class="headerlink" href="#module-gwtsa.recharge.recharge_func" title="Permalink to this headline">¶</a></h2>
+<p>recharge_func module
+Contains the classes for the different models that are available to calculate the
+recharge from evaporation and precipitation data.</p>
+<p>Each Recharge class contains at least the following:</p>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>nparam: int</dt>
+<dd>Number of parameters needed for this model.</dd>
+</dl>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>set_parameters(self, name)</dt>
+<dd>A function that returns a Pandas DataFrame of the parameters of the
+recharge function. Columns of the dataframe need to be [&#8216;value&#8217;, &#8216;pmin&#8217;,
+&#8216;pmax&#8217;, &#8216;vary&#8217;]. Rows of the DataFrame have names of the parameters. Input
+name is used as a prefix. This function is called by a Tseries object.</dd>
+<dt>simulate(self, evaporation, precipitation, p=None)</dt>
+<dd>A function that returns an array of the simulated recharge series.</dd>
+</dl>
+</div>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<p>[1] R.A. Collenteur [2016] Non-linear time series analysis of deep groundwater
+levels: Application to the Veluwe. MSc. thesis, TU Delft.
+<a class="reference external" href="http://repository.tudelft.nl/view/ir/uuid:baf4fc8c-6311-407c-b01f-c80a96ecd584/">http://repository.tudelft.nl/view/ir/uuid:baf4fc8c-6311-407c-b01f-c80a96ecd584/</a></p>
 <dl class="class">
 <dt id="gwtsa.recharge.recharge_func.Combination">
 <em class="property">class </em><code class="descclassname">gwtsa.recharge.recharge_func.</code><code class="descname">Combination</code><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Combination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Combination" title="Permalink to this definition">¶</a></dt>
@@ -167,7 +200,7 @@ Epu * min(1, Sr/ (0.5 * Srmax))</p>
 
 <dl class="method">
 <dt id="gwtsa.recharge.recharge_func.Combination.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>precipitation</em>, <em>evaporation</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Combination.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Combination.simulate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>precip</em>, <em>evap</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Combination.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Combination.simulate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -186,7 +219,7 @@ R = P - f * E</p>
 
 <dl class="method">
 <dt id="gwtsa.recharge.recharge_func.Linear.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>precipitation</em>, <em>evaporation</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Linear.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Linear.simulate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>precip</em>, <em>evap</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Linear.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Linear.simulate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -205,7 +238,7 @@ R = P - f * E</p>
 
 <dl class="method">
 <dt id="gwtsa.recharge.recharge_func.Percolation.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>precipitation</em>, <em>evaporation</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Percolation.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Percolation.simulate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>precip</em>, <em>evap</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Percolation.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Percolation.simulate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -224,11 +257,12 @@ dS / dt = Pe * (1 - (Sr / Srmax)**Beta)- Epu * min(1, Sr / (0.5 * Srmax))</p>
 
 <dl class="method">
 <dt id="gwtsa.recharge.recharge_func.Preferential.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>precipitation</em>, <em>evaporation</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Preferential.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Preferential.simulate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>precip</em>, <em>evap</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/recharge/recharge_func.html#Preferential.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.recharge.recharge_func.Preferential.simulate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
+</div>
 </div>
 <div class="section" id="module-gwtsa.recharge">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gwtsa.recharge" title="Permalink to this headline">¶</a></h2>

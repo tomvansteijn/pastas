@@ -89,39 +89,41 @@
           <div class="body" role="main">
             
   <h1>Source code for gwtsa.tseries</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">tseries module</span>
+<span class="sd">    Constains class for time series objects.</span>
+
+<span class="sd">    Each response function class needs the following:</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nparam : int</span>
+<span class="sd">        Number of parameters.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Name of this tseries object. Used as prefix for the parameters.</span>
+<span class="sd">    parameters : pandas Dataframe</span>
+<span class="sd">        Dataframe containing the parameters.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    simulate : Returns pandas Series Object with simulate values</span>
+<span class="sd">               Input: tindex: Optional pandas TimeIndex. Time index to simulate</span>
+<span class="sd">               values</span>
+<span class="sd">               p: Optional[array-like]. Parameters used for simulation. If p is not</span>
+<span class="sd">               provided, parameters attribute will be used.</span>
+<span class="sd">               Returns: pandas Series of simulated values</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">fftconvolve</span>
 
 <span class="kn">from</span> <span class="nn">checks</span> <span class="kn">import</span> <span class="n">check_tseries</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">tseries module.</span>
-<span class="sd">Constains class for time series objects.</span>
-
-<span class="sd">Each response function class needs the following:</span>
-
-<span class="sd">Attributes</span>
-<span class="sd">----------</span>
-<span class="sd">nparam : int</span>
-<span class="sd">    Number of parameters. </span>
-<span class="sd">name : str</span>
-<span class="sd">    Name of this tseries object. Used as prefix for the parameters.</span>
-<span class="sd">parameters : pandas Dataframe</span>
-<span class="sd">    Dataframe containing the parameters.</span>
-
-<span class="sd">Methods</span>
-<span class="sd">-------</span>
-<span class="sd">simulate : Returns pandas Series Object with simulate values</span>
-<span class="sd">           Input: tindex: Optional pandas TimeIndex. Time index to simulate values</span>
-<span class="sd">           p: Optional[array-like]. Parameters used for simulation. If p is not</span>
-<span class="sd">           provided, parameters attribute will be used.</span>
-<span class="sd">           Returns: pandas Series of simulated values</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
 
 <div class="viewcode-block" id="TseriesBase"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.TseriesBase">[docs]</a><span class="k">class</span> <span class="nc">TseriesBase</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Tseries Base class called by each Tseries object.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
@@ -144,8 +146,33 @@
 
 </div></div>
 <div class="viewcode-block" id="Tseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.Tseries">[docs]</a><span class="k">class</span> <span class="nc">Tseries</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Time series model consisting of the convolution of one stress with one</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Time series model consisting of the convolution of one stress with one</span>
 <span class="sd">    response function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stress: pd.Series</span>
+<span class="sd">        pandas Series object containing the stress.</span>
+<span class="sd">    rfunc: rfunc class object</span>
+<span class="sd">        Response function used in the convolution with the stess.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        Name of the stress</span>
+<span class="sd">    metadata: Optional[dict]</span>
+<span class="sd">        dictionary containing metadata about the stress.</span>
+<span class="sd">    xy: Optional[tuple]</span>
+<span class="sd">        XY location in lon-lat format used for making maps.</span>
+<span class="sd">    freq: Optional[str]</span>
+<span class="sd">        Frequency to which the stress series are transformed. By default,</span>
+<span class="sd">        the frequency is inferred from the data and that frequency is used.</span>
+<span class="sd">        The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+<span class="sd">    fillnan: Optional[str or float]</span>
+<span class="sd">        Methods or float number to fill nan-values. Default values is</span>
+<span class="sd">        &#39;mean&#39;. Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">        and &#39;mean&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">        interpolation.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -156,6 +183,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Tseries.set_init_parameters"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.Tseries.set_init_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_init_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the initial parameters back to their default values.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Tseries.simulate"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.Tseries.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -187,35 +218,67 @@
 
 </div></div>
 <div class="viewcode-block" id="Recharge"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.Recharge">[docs]</a><span class="k">class</span> <span class="nc">Recharge</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Time series model to calculate the groundwater recharge as a stress.</span>
+    <span class="sd">&quot;&quot;&quot;Time series model performing convolution on groundwater recharge</span>
+<span class="sd">    calculated from precipitation and evaporation with one response function.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    precipitation</span>
-<span class="sd">    evaporation</span>
-<span class="sd">    rfunc</span>
-<span class="sd">    recharge</span>
-<span class="sd">    name</span>
-<span class="sd">    metadata</span>
-<span class="sd">    xy</span>
-<span class="sd">    freq</span>
-<span class="sd">    fillnan</span>
+<span class="sd">    precip: pd.Series</span>
+<span class="sd">        pandas Series object containing the precipitation stress.</span>
+<span class="sd">    evap: pd.Series</span>
+<span class="sd">        pandas Series object containing the evaporationstress.</span>
+<span class="sd">    rfunc: rfunc class object</span>
+<span class="sd">        Response function used in the convolution with the stess.</span>
+<span class="sd">    recharge: recharge_func class object</span>
+<span class="sd">    name: str</span>
+<span class="sd">        Name of the stress</span>
+<span class="sd">    metadata: Optional[dict]</span>
+<span class="sd">        dictionary containing metadata about the stress.</span>
+<span class="sd">    xy: Optional[tuple]</span>
+<span class="sd">        XY location in lon-lat format used for making maps.</span>
+<span class="sd">    freq: Optional[list of str]</span>
+<span class="sd">        Frequency to which the stress series are transformed. By default,</span>
+<span class="sd">        the frequency is inferred from the data and that frequency is used.</span>
+<span class="sd">        The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+<span class="sd">    fillnan: Optional[list of str or float]</span>
+<span class="sd">        Methods or float number to fill nan-values. Default value for</span>
+<span class="sd">        precipitation is &#39;mean&#39; and default for evaporation is &#39;interpolate&#39;.</span>
+<span class="sd">        Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">        and &#39;mean&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">        interpolation.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Please check the documentation of the recharge_func classes for more details.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] R.A. Collenteur [2016] Non-linear time series analysis of deep groundwater</span>
+<span class="sd">    levels: Application to the Veluwe. MSc. thesis, TU Delft.</span>
+<span class="sd">    http://repository.tudelft.nl/view/ir/uuid:baf4fc8c-6311-407c-b01f-c80a96ecd584/</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">precipitation</span><span class="p">,</span> <span class="n">evaporation</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">recharge</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">recharge</span><span class="p">,</span>
                  <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Recharge&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">freq</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">],</span>
                  <span class="n">fillnan</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;interpolate&#39;</span><span class="p">]):</span>
         <span class="n">TseriesBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 
         <span class="c1"># Check and name the time series</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">precipitation</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fillnan</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">E</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">evaporation</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fillnan</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">precip</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fillnan</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">evap</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fillnan</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-        <span class="c1"># Select data where only where both series are available</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precipitation</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">P</span><span class="o">.</span><span class="n">index</span> <span class="o">&amp;</span> <span class="n">E</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evaporation</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="n">P</span><span class="o">.</span><span class="n">index</span> <span class="o">&amp;</span> <span class="n">E</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evaporation</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Evaporation&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precipitation</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Precipitation&#39;</span>
+        <span class="c1"># Select data where both series are available</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precip</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">P</span><span class="o">.</span><span class="n">index</span> <span class="o">&amp;</span> <span class="n">E</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evap</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="n">P</span><span class="o">.</span><span class="n">index</span> <span class="o">&amp;</span> <span class="n">E</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evap</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Evaporation&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precip</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Precipitation&#39;</span>
+
+        <span class="c1"># The recharge calculation needs arrays</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precip_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precip</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evap_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evap</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span> <span class="o">=</span> <span class="n">recharge</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
@@ -228,39 +291,70 @@
 <div class="viewcode-block" id="Recharge.simulate"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.Recharge.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precipitation</span><span class="p">)</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precipitation</span><span class="p">)</span>
-        <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaporation</span><span class="p">)</span>
-        <span class="n">rseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">:])</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">])</span>  <span class="c1"># Block response</span>
+        <span class="n">rseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precip_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evap_array</span><span class="p">,</span>
+                                         <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">:])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rseries</span><span class="p">)</span>
         <span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">fftconvolve</span><span class="p">(</span><span class="n">rseries</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">npoints</span><span class="p">],</span>
-                      <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precipitation</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Recharge&#39;</span><span class="p">)</span>
+                      <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precip</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Recharge&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">h</span>
 </div>
 <div class="viewcode-block" id="Recharge.simulate_recharge"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.Recharge.simulate_recharge">[docs]</a>    <span class="k">def</span> <span class="nf">simulate_recharge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the simulated recharge with the parameters saves in the recharge</span>
+<span class="sd">        object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        p: optional[pd.DataFrame]</span>
+<span class="sd">            Array containing the parameters of the recharge model.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            Other simulated recharge series as a pd. Series object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precipitation</span><span class="p">)</span>
-        <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaporation</span><span class="p">)</span>
-        <span class="n">rseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">:])</span>
-        <span class="n">rseries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rseries</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precipitation</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="n">rseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precip_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evap_array</span><span class="p">,</span>
+                                         <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">:])</span>
+        <span class="n">rseries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rseries</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precip</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
                             <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Recharge&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rseries</span>
 
 </div></div>
 <div class="viewcode-block" id="Well"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.Well">[docs]</a><span class="k">class</span> <span class="nc">Well</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Time series model consisting of the convolution of two stresses with</span>
+    <span class="sd">&quot;&quot;&quot;Time series model consisting of the convolution of one or more stresses with</span>
 <span class="sd">    one response function.</span>
 
-<span class="sd">    stress = stress1 + factor * stress2</span>
-
-<span class="sd">    Last parameters is factor</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stress: list</span>
+<span class="sd">        list of pandas Series objects containing the stresses.</span>
+<span class="sd">    rfunc: rfunc class object</span>
+<span class="sd">        Response function used in the convolution with the stess.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        Name of the stress</span>
+<span class="sd">    metadata: Optional[dict]</span>
+<span class="sd">        dictionary containing metadata about the stress.</span>
+<span class="sd">    xy: Optional[tuple]</span>
+<span class="sd">        XY location in lon-lat format used for making maps.</span>
+<span class="sd">    freq: Optional[str]</span>
+<span class="sd">        Frequency to which the stress series are transformed. By default,</span>
+<span class="sd">        the frequency is inferred from the data and that frequency is used.</span>
+<span class="sd">        The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+<span class="sd">    fillnan: Optional[str or float]</span>
+<span class="sd">        Methods or float number to fill nan-values. Default values is</span>
+<span class="sd">        &#39;mean&#39;. Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">        and &#39;mean&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">        interpolation.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># TODO implement this function</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stress</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stressnames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">freq</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fillna</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">):</span>
         <span class="n">TseriesBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
@@ -292,7 +386,7 @@
 
 </div></div>
 <div class="viewcode-block" id="Constant"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.tseries.Constant">[docs]</a><span class="k">class</span> <span class="nc">Constant</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A constant value.</span>
+    <span class="sd">&quot;&quot;&quot;A constant value that is added to the time series model.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

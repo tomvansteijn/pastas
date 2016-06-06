@@ -117,9 +117,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="gwtsa.imports.html">gwtsa.imports package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports.dinodata">gwtsa.imports.dinodata module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports.knmidata">gwtsa.imports.knmidata module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-gwtsa.imports">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#gwtsa-imports-dinodata-module">gwtsa.imports.dinodata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#gwtsa-imports-knmidata-module">gwtsa.imports.knmidata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.imports.html#module-contents">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="gwtsa.recharge.html">gwtsa.recharge package</a><ul>
@@ -127,7 +127,12 @@
 <li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#gwtsa-recharge-cythonize-module">gwtsa.recharge.cythonize module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#module-gwtsa.recharge.recharge">gwtsa.recharge.recharge module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#id1">gwtsa.recharge.recharge module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#module-gwtsa.recharge.recharge_func">gwtsa.recharge.recharge_func module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#module-gwtsa.recharge.recharge_func">gwtsa.recharge.recharge_func module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gwtsa.recharge.html#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gwtsa.recharge.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gwtsa.recharge.html#references">References</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="gwtsa.recharge.html#module-gwtsa.recharge">Module contents</a></li>
 </ul>
 </li>
@@ -139,9 +144,13 @@
 </div>
 <div class="section" id="module-gwtsa.checks">
 <span id="gwtsa-checks-module"></span><h2>gwtsa.checks module<a class="headerlink" href="#module-gwtsa.checks" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>checks module</dt>
+<dd>This module is used to check the time series.</dd>
+</dl>
 <dl class="function">
 <dt id="gwtsa.checks.check_oseries">
-<code class="descclassname">gwtsa.checks.</code><code class="descname">check_oseries</code><span class="sig-paren">(</span><em>oseries</em>, <em>freq</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/checks.html#check_oseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.checks.check_oseries" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gwtsa.checks.</code><code class="descname">check_oseries</code><span class="sig-paren">(</span><em>oseries</em>, <em>freq</em>, <em>fillnan='drop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/checks.html#check_oseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.checks.check_oseries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the observed time series before running a simulation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -151,17 +160,24 @@
 <blockquote>
 <div><p>Pandas series object containing the observed time series.</p>
 </div></blockquote>
-<p><strong>freq: str</strong></p>
+<p><strong>freq: optional[str]</strong></p>
 <blockquote>
 <div><p>String containing the desired frequency. The required string format is found
 at <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset">http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</a>
 -aliases</p>
 </div></blockquote>
+<p><strong>fillnan: optional[str or float]</strong></p>
+<blockquote>
+<div><p>Methods or float number to fill nan-values. Default values is
+&#8216;drop&#8217;. Currently supported options are: &#8216;interpolate&#8217;, float,
+&#8216;mean&#8217; and, &#8216;drop&#8217;. Interpolation is performed with a standard linear
+interpolation.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">oseries: pd.Series</p>
 <blockquote class="last">
-<div><p>Pandas series object check for nan-values and with the required frequency.</p>
+<div><p>Pandas series object checked for nan-values and with the required frequency.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -172,12 +188,12 @@ at <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stab
 <dl class="function">
 <dt id="gwtsa.checks.check_tseries">
 <code class="descclassname">gwtsa.checks.</code><code class="descname">check_tseries</code><span class="sig-paren">(</span><em>stress</em>, <em>freq</em>, <em>fillnan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/checks.html#check_tseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.checks.check_tseries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check the stress series before running a simulation.</p>
+<dd><p>Check the stress series when creating a time series model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tseries: pd.Series</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stress: pd.Series</strong></p>
 <blockquote>
 <div><p>Pandas series object containing the stress time series.</p>
 </div></blockquote>
@@ -199,8 +215,9 @@ interpolation.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the corrected stress as pd.Series:</p>
 <blockquote class="last">
 <div><ul class="simple">
-<li>Checked for Missing values</li>
-<li>Checked for frequency of stress</li>
+<li>nan-values dropped at begin and end.</li>
+<li>frequency made constant.</li>
+<li>handled nan-values in between.</li>
 </ul>
 </div></blockquote>
 </td>
@@ -214,42 +231,123 @@ interpolation.</p>
 <span id="gwtsa-model-module"></span><h2>gwtsa.model module<a class="headerlink" href="#module-gwtsa.model" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="gwtsa.model.Model">
-<em class="property">class </em><code class="descclassname">gwtsa.model.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>oseries</em>, <em>xy=(0</em>, <em>0)</em>, <em>metadata=None</em>, <em>freq=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">gwtsa.model.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>oseries</em>, <em>xy=(0</em>, <em>0)</em>, <em>metadata=None</em>, <em>freq=None</em>, <em>fillnan='drop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Methods</p>
 <dl class="method">
 <dt id="gwtsa.model.Model.addnoisemodel">
 <code class="descname">addnoisemodel</code><span class="sig-paren">(</span><em>noisemodel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model.addnoisemodel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model.addnoisemodel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Adds a noise model to the time series Model.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.model.Model.addtseries">
 <code class="descname">addtseries</code><span class="sig-paren">(</span><em>tseries</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model.addtseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model.addtseries" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>adds a time series model component to the Model.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.model.Model.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>oseries=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>oseries: Boolean</strong></p>
+<blockquote>
+<div><p>True to plot the observed time series.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Plot of the simulated and optionally the observed time series</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.model.Model.plot_results">
 <code class="descname">plot_results</code><span class="sig-paren">(</span><em>savefig=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model.plot_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model.plot_results" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>savefig: Optional[Boolean]</strong></p>
+<blockquote class="last">
+<div><p>True to save the figure, False is default. Figure is saved in the
+current working directory when running your python scripts.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.model.Model.residuals">
 <code class="descname">residuals</code><span class="sig-paren">(</span><em>parameters</em>, <em>tmin=None</em>, <em>tmax=None</em>, <em>solvemethod='lmfit'</em>, <em>noise=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model.residuals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model.residuals" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Method that is called by the solve fucntion to calculate the residuals.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.model.Model.simulate">
-<code class="descname">simulate</code><span class="sig-paren">(</span><em>t=None</em>, <em>p=None</em>, <em>noise=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model.simulate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>t=None</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model.simulate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>t: Optional[pd.series.index]</strong></p>
+<blockquote>
+<div><p>Time indices to use for the simulation of the time series model.</p>
+</div></blockquote>
+<p><strong>p: Optional[array]</strong></p>
+<blockquote>
+<div><p>Array of the parameters used in the time series model.</p>
+</div></blockquote>
+<p><strong>noise:</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Pandas Series object containing the simulated time series.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.model.Model.solve">
 <code class="descname">solve</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em>, <em>solvemethod='lmfit'</em>, <em>report=True</em>, <em>noise=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/model.html#Model.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.model.Model.solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Methods to solve the time series model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tmin: Optional[str]</strong></p>
+<blockquote>
+<div><p>String with a start date for the simulation period (E.g. &#8216;1980&#8217;)</p>
+</div></blockquote>
+<p><strong>tmax: Optional[str]</strong></p>
+<blockquote>
+<div><p>String with an end date for the simulation period (E.g. &#8216;2010&#8217;)</p>
+</div></blockquote>
+<p><strong>solvemethod: Optional[str]</strong></p>
+<blockquote>
+<div><p>Methods used to solve the time series model. Only &#8216;lmfit&#8217; is currently
+supported.</p>
+</div></blockquote>
+<p><strong>report: Boolean</strong></p>
+<blockquote>
+<div><p>Print a report to the screen after optimization finished.</p>
+</div></blockquote>
+<p><strong>noise: Boolean</strong></p>
+<blockquote class="last">
+<div><p>Use the nose model (True) or not (False).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -478,10 +576,32 @@ S_j : Number of free parameters</p>
 </div>
 <div class="section" id="module-gwtsa.tseries">
 <span id="gwtsa-tseries-module"></span><h2>gwtsa.tseries module<a class="headerlink" href="#module-gwtsa.tseries" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>tseries module</dt>
+<dd><p class="first">Constains class for time series objects.</p>
+<p>Each response function class needs the following:</p>
+<dl class="docutils">
+<dt>nparam <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of parameters.</dd>
+<dt>name <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Name of this tseries object. Used as prefix for the parameters.</dd>
+<dt>parameters <span class="classifier-delimiter">:</span> <span class="classifier">pandas Dataframe</span></dt>
+<dd>Dataframe containing the parameters.</dd>
+</dl>
+<dl class="last docutils">
+<dt>simulate <span class="classifier-delimiter">:</span> <span class="classifier">Returns pandas Series Object with simulate values</span></dt>
+<dd>Input: tindex: Optional pandas TimeIndex. Time index to simulate
+values
+p: Optional[array-like]. Parameters used for simulation. If p is not
+provided, parameters attribute will be used.
+Returns: pandas Series of simulated values</dd>
+</dl>
+</dd>
+</dl>
 <dl class="class">
 <dt id="gwtsa.tseries.Constant">
 <em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">Constant</code><span class="sig-paren">(</span><em>value=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Constant" title="Permalink to this definition">¶</a></dt>
-<dd><p>A constant value.</p>
+<dd><p>A constant value that is added to the time series model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -559,26 +679,65 @@ Res., 41, W12404, doi:10.1029/2004WR003726.</p>
 
 <dl class="class">
 <dt id="gwtsa.tseries.Recharge">
-<em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">Recharge</code><span class="sig-paren">(</span><em>precipitation, evaporation, rfunc, recharge, name='Recharge', metadata=None, xy=(0, 0), freq=[None, None], fillnan=['mean', 'interpolate']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Recharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Recharge" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">Recharge</code><span class="sig-paren">(</span><em>precip, evap, rfunc, recharge, name='Recharge', metadata=None, xy=(0, 0), freq=[None, None], fillnan=['mean', 'interpolate']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Recharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Recharge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#gwtsa.tseries.TseriesBase" title="gwtsa.tseries.TseriesBase"><code class="xref py py-class docutils literal"><span class="pre">gwtsa.tseries.TseriesBase</span></code></a></p>
-<p>Time series model to calculate the groundwater recharge as a stress.</p>
+<p>Time series model performing convolution on groundwater recharge
+calculated from precipitation and evaporation with one response function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>precipitation</strong></p>
-<p><strong>evaporation</strong></p>
-<p><strong>rfunc</strong></p>
-<p><strong>recharge</strong></p>
-<p><strong>name</strong></p>
-<p><strong>metadata</strong></p>
-<p><strong>xy</strong></p>
-<p><strong>freq</strong></p>
-<p class="last"><strong>fillnan</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>precip: pd.Series</strong></p>
+<blockquote>
+<div><p>pandas Series object containing the precipitation stress.</p>
+</div></blockquote>
+<p><strong>evap: pd.Series</strong></p>
+<blockquote>
+<div><p>pandas Series object containing the evaporationstress.</p>
+</div></blockquote>
+<p><strong>rfunc: rfunc class object</strong></p>
+<blockquote>
+<div><p>Response function used in the convolution with the stess.</p>
+</div></blockquote>
+<p><strong>recharge: recharge_func class object</strong></p>
+<p><strong>name: str</strong></p>
+<blockquote>
+<div><p>Name of the stress</p>
+</div></blockquote>
+<p><strong>metadata: Optional[dict]</strong></p>
+<blockquote>
+<div><p>dictionary containing metadata about the stress.</p>
+</div></blockquote>
+<p><strong>xy: Optional[tuple]</strong></p>
+<blockquote>
+<div><p>XY location in lon-lat format used for making maps.</p>
+</div></blockquote>
+<p><strong>freq: Optional[list of str]</strong></p>
+<blockquote>
+<div><p>Frequency to which the stress series are transformed. By default,
+the frequency is inferred from the data and that frequency is used.
+The required string format is found
+at <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset">http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</a>
+-aliases</p>
+</div></blockquote>
+<p><strong>fillnan: Optional[list of str or float]</strong></p>
+<blockquote class="last">
+<div><p>Methods or float number to fill nan-values. Default value for
+precipitation is &#8216;mean&#8217; and default for evaporation is &#8216;interpolate&#8217;.
+Currently supported options are: &#8216;interpolate&#8217;, float,
+and &#8216;mean&#8217;. Interpolation is performed with a standard linear
+interpolation.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>Please check the documentation of the recharge_func classes for more details.</p>
+<p class="rubric">References</p>
+<p>[1] R.A. Collenteur [2016] Non-linear time series analysis of deep groundwater
+levels: Application to the Veluwe. MSc. thesis, TU Delft.
+<a class="reference external" href="http://repository.tudelft.nl/view/ir/uuid:baf4fc8c-6311-407c-b01f-c80a96ecd584/">http://repository.tudelft.nl/view/ir/uuid:baf4fc8c-6311-407c-b01f-c80a96ecd584/</a></p>
 <p class="rubric">Methods</p>
 <dl class="method">
 <dt id="gwtsa.tseries.Recharge.set_init_parameters">
@@ -593,7 +752,26 @@ Res., 41, W12404, doi:10.1029/2004WR003726.</p>
 <dl class="method">
 <dt id="gwtsa.tseries.Recharge.simulate_recharge">
 <code class="descname">simulate_recharge</code><span class="sig-paren">(</span><em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Recharge.simulate_recharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Recharge.simulate_recharge" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the simulated recharge with the parameters saves in the recharge
+object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p: optional[pd.DataFrame]</strong></p>
+<blockquote>
+<div><p>Array containing the parameters of the recharge model.</p>
+</div></blockquote>
+<p><strong>Returns</strong></p>
+<p><strong>&#8212;&#8212;-</strong></p>
+<blockquote class="last">
+<div><p>Other simulated recharge series as a pd. Series object.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -603,11 +781,55 @@ Res., 41, W12404, doi:10.1029/2004WR003726.</p>
 <dd><p>Bases: <a class="reference internal" href="#gwtsa.tseries.TseriesBase" title="gwtsa.tseries.TseriesBase"><code class="xref py py-class docutils literal"><span class="pre">gwtsa.tseries.TseriesBase</span></code></a></p>
 <p>Time series model consisting of the convolution of one stress with one
 response function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stress: pd.Series</strong></p>
+<blockquote>
+<div><p>pandas Series object containing the stress.</p>
+</div></blockquote>
+<p><strong>rfunc: rfunc class object</strong></p>
+<blockquote>
+<div><p>Response function used in the convolution with the stess.</p>
+</div></blockquote>
+<p><strong>name: str</strong></p>
+<blockquote>
+<div><p>Name of the stress</p>
+</div></blockquote>
+<p><strong>metadata: Optional[dict]</strong></p>
+<blockquote>
+<div><p>dictionary containing metadata about the stress.</p>
+</div></blockquote>
+<p><strong>xy: Optional[tuple]</strong></p>
+<blockquote>
+<div><p>XY location in lon-lat format used for making maps.</p>
+</div></blockquote>
+<p><strong>freq: Optional[str]</strong></p>
+<blockquote>
+<div><p>Frequency to which the stress series are transformed. By default,
+the frequency is inferred from the data and that frequency is used.
+The required string format is found
+at <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset">http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</a>
+-aliases</p>
+</div></blockquote>
+<p><strong>fillnan: Optional[str or float]</strong></p>
+<blockquote class="last">
+<div><p>Methods or float number to fill nan-values. Default values is
+&#8216;mean&#8217;. Currently supported options are: &#8216;interpolate&#8217;, float,
+and &#8216;mean&#8217;. Interpolation is performed with a standard linear
+interpolation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <dl class="method">
 <dt id="gwtsa.tseries.Tseries.set_init_parameters">
 <code class="descname">set_init_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Tseries.set_init_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Tseries.set_init_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the initial parameters back to their default values.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.tseries.Tseries.simulate">
@@ -657,10 +879,51 @@ provided, parameters attribute will be used.</p>
 <dt id="gwtsa.tseries.Well">
 <em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">Well</code><span class="sig-paren">(</span><em>stress</em>, <em>rfunc</em>, <em>r</em>, <em>name</em>, <em>metadata=None</em>, <em>stressnames=None</em>, <em>xy=(0</em>, <em>0)</em>, <em>freq=None</em>, <em>fillna='mean'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Well"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Well" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#gwtsa.tseries.TseriesBase" title="gwtsa.tseries.TseriesBase"><code class="xref py py-class docutils literal"><span class="pre">gwtsa.tseries.TseriesBase</span></code></a></p>
-<p>Time series model consisting of the convolution of two stresses with
+<p>Time series model consisting of the convolution of one or more stresses with
 one response function.</p>
-<p>stress = stress1 + factor * stress2</p>
-<p>Last parameters is factor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stress: list</strong></p>
+<blockquote>
+<div><p>list of pandas Series objects containing the stresses.</p>
+</div></blockquote>
+<p><strong>rfunc: rfunc class object</strong></p>
+<blockquote>
+<div><p>Response function used in the convolution with the stess.</p>
+</div></blockquote>
+<p><strong>name: str</strong></p>
+<blockquote>
+<div><p>Name of the stress</p>
+</div></blockquote>
+<p><strong>metadata: Optional[dict]</strong></p>
+<blockquote>
+<div><p>dictionary containing metadata about the stress.</p>
+</div></blockquote>
+<p><strong>xy: Optional[tuple]</strong></p>
+<blockquote>
+<div><p>XY location in lon-lat format used for making maps.</p>
+</div></blockquote>
+<p><strong>freq: Optional[str]</strong></p>
+<blockquote>
+<div><p>Frequency to which the stress series are transformed. By default,
+the frequency is inferred from the data and that frequency is used.
+The required string format is found
+at <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset">http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</a>
+-aliases</p>
+</div></blockquote>
+<p><strong>fillnan: Optional[str or float]</strong></p>
+<blockquote class="last">
+<div><p>Methods or float number to fill nan-values. Default values is
+&#8216;mean&#8217;. Currently supported options are: &#8216;interpolate&#8217;, float,
+and &#8216;mean&#8217;. Interpolation is performed with a standard linear
+interpolation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <dl class="method">
 <dt id="gwtsa.tseries.Well.set_init_parameters">
