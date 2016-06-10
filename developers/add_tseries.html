@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Add Tseries classes &mdash; GWTSA 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GWTSA 0.0.1 documentation" href="../index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="GWTSA Logo" height="100px"></a>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../search.html">Search</a>|&nbsp;</li>
+        <li><a href="../examples.html">Examples</a>|&nbsp;</li>
+       <li><a href="../content.html">Documentation </a> |&nbsp;</li>
+       <li><a href="../developers.html">Developers </a> |&nbsp;</li>
+
+ 
+      </ul>
+    </div>
+
+<div class="sidebar">
+      <div class="sphinxsidebar">
+          <div class="sphinxsidebarwrapper">
+              <h3><a href="#">Project Info</a></h3>
+              <p>Version:<b> 0.0.1 </b></p>
+              <a href="https://travis-ci.org/gwtsa/gwtsa"><img
+        src="https://travis-ci.org/gwtsa/gwtsa.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a>
+          </div>
+      </div>
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Add Tseries classes</a><ul>
+<li><a class="reference internal" href="#minimum-requirements-of-a-tseries-class">Minimum requirements of a tseries class</a></li>
+<li><a class="reference internal" href="#frequently-asked-questions">Frequently asked questions</a></li>
+<li><a class="reference internal" href="#special-classes">Special classes</a></li>
+<li><a class="reference internal" href="#example-response-function-class">Example Response function class:</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developers/add_tseries.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="add-tseries-classes">
+<h1>Add Tseries classes<a class="headerlink" href="#add-tseries-classes" title="Permalink to this headline">¶</a></h1>
+<p>In this section it is described how a new tseries object can be added to
+GWTSA. The classes are defined in <cite>tseries.py</cite>, but this is not strictly
+necessary for your own project. All that is necessary is to write a class that
+can be imported and used by GWTSA. Before you start, it is a good idea to
+study the Tseries and the TseriesBase classes in <cite>tseries.py</cite> to get a good idea of
+the general form of a tseries class.</p>
+<p>In general, the following steps are necessary:</p>
+<ol class="arabic simple">
+<li>Write a new tseries class according to the below requirements.</li>
+<li>Add the tseries class to the imports in __init__.py.</li>
+<li>Test the class in a time series model.</li>
+</ol>
+<div class="section" id="minimum-requirements-of-a-tseries-class">
+<h2>Minimum requirements of a tseries class<a class="headerlink" href="#minimum-requirements-of-a-tseries-class" title="Permalink to this headline">¶</a></h2>
+<p>List of attributes:</p>
+<ul class="simple">
+<li>name: Name of the time series component [str].</li>
+<li>metadata: dictionary containing additional information [dict].</li>
+<li>xy: location of the stress in lat-lon format [tuple].</li>
+<li>nparam : number of parameters [int].</li>
+</ul>
+<p>List of class methods:</p>
+<ul class="simple">
+<li>__init__: setting the above mentioned attributes.</li>
+<li>set_init_parameters: used to set the initial parameters.</li>
+<li>simulate: returns a pd.Series object of the simulate time series.</li>
+</ul>
+</div>
+<div class="section" id="frequently-asked-questions">
+<h2>Frequently asked questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h2>
+<p><strong>Q: Why does every simulate method have to following line?</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>A: These two lines of code are necessary to be able to simulate the time series when</dt>
+<dd>no parameters are provided. After optimization the calibrated parameters are
+returned to the tseries object and can be used for simulation.</dd>
+</dl>
+<p><strong>Q: Why does every tseries class have a set_init_parameters method?</strong></p>
+<p>A: This way the initial parameter can be set by the user after optimization. In
+the future, this will support the keyword argument in the Model class solve method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">initialize</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="special-classes">
+<h2>Special classes<a class="headerlink" href="#special-classes" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>NoiseModel</cite> class is considered as a special class and does not comply with
+the above descriptions. It is recommended to closely studied the NoiseModel class</p>
+<blockquote>
+<div>when adding a new noise model.</div></blockquote>
+</div>
+<div class="section" id="example-response-function-class">
+<h2>Example Response function class:<a class="headerlink" href="#example-response-function-class" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Tseries</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Docs go here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stress</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">freq</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">fillnan</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">):</span>
+        <span class="n">TseriesBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stress</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">set_init_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Docs go here</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Docs go here</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">fftconvolve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">npoints</span><span class="p">],</span>
+                      <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">h</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../search.html">Search</a>|&nbsp;</li>
+        <li><a href="../examples.html">Examples</a>|&nbsp;</li>
+       <li><a href="../content.html">Documentation </a> |&nbsp;</li>
+       <li><a href="../developers.html">Developers </a> |&nbsp;</li>
+
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
