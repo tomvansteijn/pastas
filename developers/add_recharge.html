@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; GWTSA 0.0.1 documentation</title>
+    <title>Adding recharge classes &mdash; GWTSA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -64,6 +64,12 @@
     
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Adding recharge classes</a></li>
+<li><a class="reference internal" href="#the-recharge-func-py-classes">The recharge_func.py classes</a></li>
+</ul>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -94,7 +100,65 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
+  <div class="section" id="adding-recharge-classes">
+<h1>Adding recharge classes<a class="headerlink" href="#adding-recharge-classes" title="Permalink to this headline">¶</a></h1>
+<p>the recharge class is developed specifically for the simulation of groundwater,
+with different options to calculate the groundwater recharge. The base of the
+recharge models is a <cite>Recharge</cite> class in tseries.py. This class takes two
+stresses: (potential) evaporation and precipitation, and uses a recharge function
+to calculate a recharge stress from these two input stresses. Finally, the
+calculated recharge series is convoluted with a response function to calculate
+the contribution to the groundwater heads. the parameters for both the response
+function and recharge model are optimized simultaneously this way.</p>
+<p>In this section it is described how to add a recharge class to calculate the
+recharge. The actual functions to calculate the recharge are contained in the
+<cite>recharge</cite> folder. Within this folder, two files are important to take a look at:
+<cite>recharge_func.py</cite> and <cite>recharge.py</cite>. The first contains a class for each
+recharge model (similar to the classes in rfunc.py) and the second contains the
+computational core to calculate recharge series. The other files are solutions
+to reduce computation times but we&#8217;ll come back to those.</p>
+<ul class="simple">
+<li>Please take a look at the Recharge example notebook!*</li>
+</ul>
+</div>
+<div class="section" id="the-recharge-func-py-classes">
+<h1>The recharge_func.py classes<a class="headerlink" href="#the-recharge-func-py-classes" title="Permalink to this headline">¶</a></h1>
+<p>The classes defined in this file are the classes that are provided when a
+Recharge tseries object is created. E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">Recharge</span><span class="p">(</span><span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">(),</span> <span class="n">Preferential</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>In this section we will have a closer look at the Preferential() class.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Preferential</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preferential flow recharge model</span>
+
+<span class="sd">    The water balance for the root zone is calculated as:</span>
+<span class="sd">    dS / dt = Pe * (1 - (Sr / Srmax)**Beta)- Epu * min(1, Sr / (0.5 * Srmax))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Has to be 1 right now.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 1 = implicit, 2 = explicit</span>
+
+    <span class="k">def</span> <span class="nf">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;pmin&#39;</span><span class="p">,</span> <span class="s1">&#39;pmax&#39;</span><span class="p">,</span> <span class="s1">&#39;vary&#39;</span><span class="p">])</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Srmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.26</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Beta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Imax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5e-3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parameters</span>
+
+    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">precip</span><span class="p">))</span>
+        <span class="n">recharge</span> <span class="o">=</span> <span class="n">pref</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">recharge</span>
+</pre></div>
+</div>
+</div>
+
 
           </div>
         </div>
