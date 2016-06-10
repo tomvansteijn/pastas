@@ -71,7 +71,11 @@
 <li><a class="reference internal" href="#module-gwtsa.checks">gwtsa.checks module</a></li>
 <li><a class="reference internal" href="#module-gwtsa.model">gwtsa.model module</a></li>
 <li><a class="reference internal" href="#module-gwtsa.rfunc">gwtsa.rfunc module</a></li>
-<li><a class="reference internal" href="#module-gwtsa.stats">gwtsa.stats module</a></li>
+<li><a class="reference internal" href="#module-gwtsa.stats">gwtsa.stats module</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#todo">TODO</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-gwtsa.tseries">gwtsa.tseries module</a></li>
 <li><a class="reference internal" href="#gwtsa-version-module">gwtsa.version module</a></li>
 <li><a class="reference internal" href="#module-gwtsa">Module contents</a></li>
@@ -494,20 +498,84 @@ storage. Eos, Transactions American Geophysical Union, 16(2), 519-524.</p>
 </div>
 <div class="section" id="module-gwtsa.stats">
 <span id="gwtsa-stats-module"></span><h2>gwtsa.stats module<a class="headerlink" href="#module-gwtsa.stats" title="Permalink to this headline">¶</a></h2>
+<p>Statistics for time series models.</p>
+<div class="section" id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ml_stats</span> <span class="o">=</span> <span class="n">Statistics</span><span class="p">(</span><span class="n">ml</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml_stats</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Statistic:                       Value
+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;  &#8212;&#8212;-
+Explained variance percentage  92.6574
+Pearson R^2                     0.9631</p>
+</div>
+<div class="section" id="todo">
+<h3>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>ACF for irregular timesteps</li>
+<li>PACF for irregular timesteps</li>
+<li>Nash-Sutcliffe</li>
+<li>portmanteau test (ljung-Box &amp; Box-Pierce)</li>
+<li></li>
+</ul>
 <dl class="class">
 <dt id="gwtsa.stats.Statistics">
 <em class="property">class </em><code class="descclassname">gwtsa.stats.</code><code class="descname">Statistics</code><span class="sig-paren">(</span><em>ml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>This class contains all the statistical methods available.</p>
 <p class="rubric">Methods</p>
 <dl class="method">
+<dt id="gwtsa.stats.Statistics.GHG">
+<code class="descname">GHG</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em>, <em>series='oseries'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.GHG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.GHG" title="Permalink to this definition">¶</a></dt>
+<dd><p>GHG: Gemiddeld Hoog Grondwater (in Dutch)</p>
+<p>3 maximum groundwater level observations for each year divided by 3 times
+the number of years.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>series: Optional[str]</strong></p>
+<blockquote class="last">
+<div><p>string for the series to calculate the statistic for. Supported
+options are: &#8216;oseries&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwtsa.stats.Statistics.GLG">
+<code class="descname">GLG</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em>, <em>series='oseries'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.GLG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.GLG" title="Permalink to this definition">¶</a></dt>
+<dd><p>GLG: Gemiddeld Laag Grondwater (in Dutch)</p>
+<p>3 minimum groundwater level observations for each year divided by 3 times
+the number of years.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>series: Optional[str]</strong></p>
+<blockquote class="last">
+<div><p>string for the series to calculate the statistic for. Supported
+options are: &#8216;oseries&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="gwtsa.stats.Statistics.acf">
-<code class="descname">acf</code><span class="sig-paren">(</span><em>nlags=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.acf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.acf" title="Permalink to this definition">¶</a></dt>
+<code class="descname">acf</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em>, <em>nlags=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.acf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.acf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Autocorrelation function.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.stats.Statistics.aic">
-<code class="descname">aic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.aic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.aic" title="Permalink to this definition">¶</a></dt>
+<code class="descname">aic</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.aic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.aic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Akaike Information Criterium</p>
 <p>AIC = -2 log(L) + 2 S_j
 S_j : Number of free parameters</p>
@@ -515,64 +583,118 @@ S_j : Number of free parameters</p>
 
 <dl class="method">
 <dt id="gwtsa.stats.Statistics.avg_dev">
-<code class="descname">avg_dev</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.avg_dev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.avg_dev" title="Permalink to this definition">¶</a></dt>
+<code class="descname">avg_dev</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.avg_dev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.avg_dev" title="Permalink to this definition">¶</a></dt>
 <dd><p>Average deviation of the residuals.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.stats.Statistics.bic">
-<code class="descname">bic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.bic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.bic" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bic</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.bic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.bic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bayesian Information Criterium</p>
 <p>BIC = -2 log(L) + S_j log(N)
 S_j : Number of free parameters</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="gwtsa.stats.Statistics.descriptive">
+<code class="descname">descriptive</code><span class="sig-paren">(</span><em>series</em>, <em>tmin</em>, <em>tmax</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.descriptive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.descriptive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="gwtsa.stats.Statistics.evp">
-<code class="descname">evp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.evp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.evp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">evp</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.evp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.evp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Explained variance percentage.</p>
 <p>evp = (var(h) - var(res)) / var(h) * 100%</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="gwtsa.stats.Statistics.get_iseries">
+<code class="descname">get_iseries</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.get_iseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.get_iseries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwtsa.stats.Statistics.get_oseries">
+<code class="descname">get_oseries</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.get_oseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.get_oseries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwtsa.stats.Statistics.get_rseries">
+<code class="descname">get_rseries</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.get_rseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.get_rseries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwtsa.stats.Statistics.get_series">
+<code class="descname">get_series</code><span class="sig-paren">(</span><em>series</em>, <em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.get_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.get_series" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwtsa.stats.Statistics.get_sseries">
+<code class="descname">get_sseries</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.get_sseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.get_sseries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="gwtsa.stats.Statistics.pacf">
-<code class="descname">pacf</code><span class="sig-paren">(</span><em>nlags=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.pacf" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pacf</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em>, <em>nlags=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.pacf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partial autocorrelation function.</p>
 <p><a class="reference external" href="http://statsmodels.sourceforge.net/devel/_modules/statsmodels/tsa/stattools.html#acf">http://statsmodels.sourceforge.net/devel/_modules/statsmodels/tsa/stattools.html#acf</a></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.stats.Statistics.pearson">
-<code class="descname">pearson</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.pearson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.pearson" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pearson</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.pearson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.pearson" title="Permalink to this definition">¶</a></dt>
 <dd><p>Correlation between observed and simulated series.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.stats.Statistics.plot_diagnostics">
-<code class="descname">plot_diagnostics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.plot_diagnostics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.plot_diagnostics" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot_diagnostics</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.plot_diagnostics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.plot_diagnostics" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="gwtsa.stats.Statistics.plot_statistics">
+<code class="descname">plot_statistics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.plot_statistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.plot_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the statistics with tabs. Experimental!!</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="gwtsa.stats.Statistics.r_corrected">
-<code class="descname">r_corrected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.r_corrected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.r_corrected" title="Permalink to this definition">¶</a></dt>
+<code class="descname">r_corrected</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.r_corrected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.r_corrected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corrected R-squared</p>
 <p>R_corrected = 1 - (n-1) / (n-N_param) * RSS/TSS</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.stats.Statistics.rmse">
-<code class="descname">rmse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.rmse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.rmse" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rmse</code><span class="sig-paren">(</span><em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.rmse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.rmse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Root mean squared error of the residuals.</p>
 <p>rmse = sqrt(sum(residuals**2) / N)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gwtsa.stats.Statistics.summary">
-<code class="descname">summary</code><span class="sig-paren">(</span><em>output='basic'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.summary" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">summary</code><span class="sig-paren">(</span><em>output='basic'</em>, <em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/stats.html#Statistics.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.stats.Statistics.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a summary table of the model statistics. The set of statistics
+that are printed are selected by a dictionary of the desired statistics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>output: str or dict</strong></p>
+<blockquote>
+<div><p>dictionary of the desired statistics or a string with one of the
+predefined sets. Supported options are: &#8216;basic&#8217;, &#8216;all&#8217;, and &#8216;dutch&#8217;.</p>
+</div></blockquote>
+<p><strong>tmin</strong></p>
+<p class="last"><strong>tmax</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
+</div>
 </div>
 <div class="section" id="module-gwtsa.tseries">
 <span id="gwtsa-tseries-module"></span><h2>gwtsa.tseries module<a class="headerlink" href="#module-gwtsa.tseries" title="Permalink to this headline">¶</a></h2>
@@ -600,7 +722,7 @@ Returns: pandas Series of simulated values</dd>
 </dl>
 <dl class="class">
 <dt id="gwtsa.tseries.Constant">
-<em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">Constant</code><span class="sig-paren">(</span><em>value=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Constant" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">gwtsa.tseries.</code><code class="descname">Constant</code><span class="sig-paren">(</span><em>name='Constant'</em>, <em>xy=None</em>, <em>metadata=None</em>, <em>value=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Constant" title="Permalink to this definition">¶</a></dt>
 <dd><p>A constant value that is added to the time series model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -616,6 +738,11 @@ series.</p>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
+<dl class="method">
+<dt id="gwtsa.tseries.Constant.set_init_parameters">
+<code class="descname">set_init_parameters</code><span class="sig-paren">(</span><em>value=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Constant.set_init_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Constant.set_init_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="gwtsa.tseries.Constant.simulate">
 <code class="descname">simulate</code><span class="sig-paren">(</span><em>tindex=None</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gwtsa/tseries.html#Constant.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwtsa.tseries.Constant.simulate" title="Permalink to this definition">¶</a></dt>
