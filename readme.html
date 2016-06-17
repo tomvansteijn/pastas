@@ -37,9 +37,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
         <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
@@ -122,12 +119,18 @@ documentation website. To set up your github for the pasta-doc folder, <a class=
 <p>2. Move to the doc folder in the pasta-master folder:
 &gt;&gt;&gt; cd ../path-to-pasta-master/doc</p>
 <ol class="arabic simple" start="3">
+<li>read pasta modules with sphinx-apidoc</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sphinx</span><span class="o">-</span><span class="n">apidoc</span> <span class="o">../</span><span class="n">pasta</span> <span class="o">-</span><span class="n">o</span> <span class="o">.</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
 <li>Run sphinx auto documentation:</li>
 </ol>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cd</span> <span class="n">html</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="4">
+<ol class="arabic simple" start="5">
 <li>The html files have now been created in the html folder with the pasta-doc folder if Sphinxdoc was succesfull.</li>
 <li>Move to the html folder with the pasta-docs folder:</li>
 </ol>
@@ -135,7 +138,7 @@ documentation website. To set up your github for the pasta-doc folder, <a class=
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cd</span> <span class="o">../</span><span class="n">path</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">pasta</span><span class="o">-</span><span class="n">docs</span><span class="o">/</span><span class="n">html</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="6">
+<ol class="arabic simple" start="7">
 <li>Update the gh-pages branch:</li>
 </ol>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">git</span> <span class="n">branch</span> <span class="c1"># Check if we are in the gh-pages branch</span>
@@ -161,9 +164,6 @@ documentation website. To set up your github for the pasta-doc folder, <a class=
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
         <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
