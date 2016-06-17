@@ -38,9 +38,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">Home</a>|&nbsp;</li>
         <li><a href="../../search.html">Search</a>|&nbsp;</li>
         <li><a href="../../examples.html">Examples</a>|&nbsp;</li>
@@ -148,10 +145,10 @@
         <span class="c1"># Store all the series for quicker computation of the statistics</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sseries</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>  <span class="c1"># Simulated series</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">oseries</span>  <span class="c1"># Observed series</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rseries</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">oseries</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sseries</span>  <span class="c1"># Residuals series</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rseries</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">residuals</span><span class="p">()</span>  <span class="c1"># Residuals series</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">odelt</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">odelt</span>  <span class="c1"># Timestep between observations</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iseries</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">noisemodel</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rseries</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">odelt</span><span class="p">)</span>  <span class="c1"># Innovations</span>
+        <span class="k">if</span> <span class="n">ml</span><span class="o">.</span><span class="n">noisemodel</span><span class="p">:</span> <span class="c1"># Calculate the innovations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">iseries</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">noisemodel</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rseries</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">odelt</span><span class="p">)</span>
 
         <span class="c1"># Sture some other parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sseries</span><span class="p">)</span>  <span class="c1"># Number of observations</span>
@@ -168,8 +165,8 @@
             <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">tindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">tmin</span><span class="p">:</span> <span class="n">tmax</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
         <span class="n">series</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">series</span><span class="p">)[</span><span class="n">tindex</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">series</span>
-</div>
+        <span class="k">return</span> <span class="n">series</span></div>
+
 <div class="viewcode-block" id="Statistics.get_rseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.get_rseries">[docs]</a>    <span class="k">def</span> <span class="nf">get_rseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -177,8 +174,8 @@
             <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">tindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tmin</span><span class="p">:</span> <span class="n">tmax</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
         <span class="n">rseries</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rseries</span><span class="p">)[</span><span class="n">tindex</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">rseries</span>
-</div>
+        <span class="k">return</span> <span class="n">rseries</span></div>
+
 <div class="viewcode-block" id="Statistics.get_sseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.get_sseries">[docs]</a>    <span class="k">def</span> <span class="nf">get_sseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -186,8 +183,8 @@
             <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">tindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tmin</span><span class="p">:</span> <span class="n">tmax</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
         <span class="n">sseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sseries</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>  <span class="c1"># Simulated series</span>
-        <span class="k">return</span> <span class="n">sseries</span>
-</div>
+        <span class="k">return</span> <span class="n">sseries</span></div>
+
 <div class="viewcode-block" id="Statistics.get_iseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.get_iseries">[docs]</a>    <span class="k">def</span> <span class="nf">get_iseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -195,8 +192,8 @@
             <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">tindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tmin</span><span class="p">:</span> <span class="n">tmax</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
         <span class="n">iseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iseries</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">iseries</span>
-</div>
+        <span class="k">return</span> <span class="n">iseries</span></div>
+
 <div class="viewcode-block" id="Statistics.get_oseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.get_oseries">[docs]</a>    <span class="k">def</span> <span class="nf">get_oseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -204,10 +201,10 @@
             <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">tindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tmin</span><span class="p">:</span> <span class="n">tmax</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
         <span class="n">oseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">oseries</span>
+        <span class="k">return</span> <span class="n">oseries</span></div>
 
     <span class="c1"># The statistical functions</span>
-</div>
+
 <div class="viewcode-block" id="Statistics.rmse"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.rmse">[docs]</a>    <span class="k">def</span> <span class="nf">rmse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Root mean squared error of the residuals.</span>
 
@@ -216,15 +213,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">size</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">res</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">res</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Statistics.avg_dev"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.avg_dev">[docs]</a>    <span class="k">def</span> <span class="nf">avg_dev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Average deviation of the residuals.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Statistics.evp"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.evp">[docs]</a>    <span class="k">def</span> <span class="nf">evp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Explained variance percentage.</span>
 
@@ -233,8 +230,8 @@
 
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
         <span class="n">sseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">sseries</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">sseries</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
-</div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">sseries</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">sseries</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span></div>
+
 <div class="viewcode-block" id="Statistics.pearson"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.pearson">[docs]</a>    <span class="k">def</span> <span class="nf">pearson</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Correlation between observed and simulated series.</span>
 
@@ -242,8 +239,8 @@
 
         <span class="n">sseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
         <span class="n">oseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">sseries</span><span class="p">,</span> <span class="n">oseries</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">sseries</span><span class="p">,</span> <span class="n">oseries</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="Statistics.r_corrected"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.r_corrected">[docs]</a>    <span class="k">def</span> <span class="nf">r_corrected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Corrected R-squared</span>
 
@@ -257,8 +254,8 @@
 
         <span class="n">RSS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">res</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
         <span class="n">TSS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">oseries</span> <span class="o">-</span> <span class="n">oseries</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">)</span> <span class="o">*</span> <span class="n">RSS</span> <span class="o">/</span> <span class="n">TSS</span>
-</div>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span><span class="p">)</span> <span class="o">*</span> <span class="n">RSS</span> <span class="o">/</span> <span class="n">TSS</span></div>
+
 <div class="viewcode-block" id="Statistics.bic"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.bic">[docs]</a>    <span class="k">def</span> <span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Bayesian Information Criterium</span>
 
@@ -269,8 +266,8 @@
         <span class="n">iseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_iseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="n">iseries</span><span class="o">.</span><span class="n">size</span>
         <span class="n">bic</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">iseries</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">bic</span>
-</div>
+        <span class="k">return</span> <span class="n">bic</span></div>
+
 <div class="viewcode-block" id="Statistics.aic"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.aic">[docs]</a>    <span class="k">def</span> <span class="nf">aic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Akaike Information Criterium</span>
 
@@ -280,8 +277,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">iseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_iseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
         <span class="n">aic</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">iseries</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_param</span>
-        <span class="k">return</span> <span class="n">aic</span>
-</div>
+        <span class="k">return</span> <span class="n">aic</span></div>
+
 <div class="viewcode-block" id="Statistics.acf"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.acf">[docs]</a>    <span class="k">def</span> <span class="nf">acf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Autocorrelation function.</span>
 
@@ -291,8 +288,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">iseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_iseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">acf</span><span class="p">(</span><span class="n">iseries</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="n">nlags</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">acf</span><span class="p">(</span><span class="n">iseries</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="n">nlags</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Statistics.pacf"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.pacf">[docs]</a>    <span class="k">def</span> <span class="nf">pacf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Partial autocorrelation function.</span>
 
@@ -303,8 +300,8 @@
 <span class="sd">        Compute  partial autocorrelation for irregulat time steps.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">iseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_iseries</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">pacf</span><span class="p">(</span><span class="n">iseries</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="n">nlags</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">pacf</span><span class="p">(</span><span class="n">iseries</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="n">nlags</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Statistics.GHG"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.GHG">[docs]</a>    <span class="k">def</span> <span class="nf">GHG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">series</span><span class="o">=</span><span class="s1">&#39;oseries&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;GHG: Gemiddeld Hoog Grondwater (in Dutch)</span>
 
@@ -325,8 +322,8 @@
                 <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">oseries</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">year</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                                                           <span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">)[</span>
                          <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-</div>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="Statistics.GLG"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.GLG">[docs]</a>    <span class="k">def</span> <span class="nf">GLG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">series</span><span class="o">=</span><span class="s1">&#39;oseries&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;GLG: Gemiddeld Laag Grondwater (in Dutch)</span>
 
@@ -347,12 +344,12 @@
                 <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">oseries</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">year</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                                                           <span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">)[</span>
                          <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-</div>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="Statistics.descriptive"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.descriptive">[docs]</a>    <span class="k">def</span> <span class="nf">descriptive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">):</span>
         <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_series</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
-        <span class="n">series</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</div>
+        <span class="n">series</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Statistics.plot_diagnostics"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.plot_diagnostics">[docs]</a>    <span class="k">def</span> <span class="nf">plot_diagnostics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
@@ -372,8 +369,8 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="n">probplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iseries</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Statistics.plot_statistics"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.plot_statistics">[docs]</a>    <span class="k">def</span> <span class="nf">plot_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Plot the statistics with tabs. Experimental!!</span>
 
@@ -414,8 +411,8 @@
         <span class="n">n</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Two&#39;</span><span class="p">)</span>
         <span class="n">Button</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Statistics.summary"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.stats.Statistics.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;basic&#39;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Prints a summary table of the model statistics. The set of statistics</span>
 <span class="sd">        that are printed are selected by a dictionary of the desired statistics.</span>
@@ -478,9 +475,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">Home</a>|&nbsp;</li>
         <li><a href="../../search.html">Search</a>|&nbsp;</li>
         <li><a href="../../examples.html">Examples</a>|&nbsp;</li>
@@ -493,7 +487,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>
