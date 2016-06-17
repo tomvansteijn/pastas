@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gwtsa.imports.knmidata &mdash; PASTA 0.0.1 documentation</title>
+    <title>pasta.read.knmidata &mdash; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -89,23 +89,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for gwtsa.imports.knmidata</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Created on Fri Mar 18 13:35:39 2016</span>
-
+  <h1>Source code for pasta.read.knmidata</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">@author: ruben</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
-<span class="c1"># from io import StringIO</span>
 <span class="kn">import</span> <span class="nn">cStringIO</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy.lib.recfunctions</span> <span class="kn">as</span> <span class="nn">rfn</span>
 
 
-<div class="viewcode-block" id="KnmiStation"><a class="viewcode-back" href="../../../gwtsa.imports.html#gwtsa.imports.knmidata.KnmiStation">[docs]</a><span class="k">class</span> <span class="nc">KnmiStation</span><span class="p">:</span>
+<div class="viewcode-block" id="KnmiStation"><a class="viewcode-back" href="../../../pasta.read.html#pasta.read.knmidata.KnmiStation">[docs]</a><span class="k">class</span> <span class="nc">KnmiStation</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inseason</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stns</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -138,15 +136,15 @@
 
     <span class="c1"># Alternate constructor</span>
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="KnmiStation.fromfile"><a class="viewcode-back" href="../../../gwtsa.imports.html#gwtsa.imports.knmidata.KnmiStation.fromfile">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="KnmiStation.fromfile"><a class="viewcode-back" href="../../../pasta.read.html#pasta.read.knmidata.KnmiStation.fromfile">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="bp">self</span> <span class="o">=</span> <span class="n">cls</span><span class="p">()</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;U&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">readdata</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="bp">self</span>
-</div>
-<div class="viewcode-block" id="KnmiStation.readdata"><a class="viewcode-back" href="../../../gwtsa.imports.html#gwtsa.imports.knmidata.KnmiStation.readdata">[docs]</a>    <span class="k">def</span> <span class="nf">readdata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="KnmiStation.readdata"><a class="viewcode-back" href="../../../pasta.read.html#pasta.read.knmidata.KnmiStation.readdata">[docs]</a>    <span class="k">def</span> <span class="nf">readdata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
         <span class="n">stations</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">isLocations</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">isVariables</span> <span class="o">=</span> <span class="bp">False</span>
@@ -197,8 +195,8 @@
                 <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;    &#39;</span><span class="p">,</span> <span class="s1">&#39;  &#39;</span><span class="p">)</span>
                 <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;   &#39;</span><span class="p">,</span> <span class="s1">&#39;  &#39;</span><span class="p">)</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">cStringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;  &#39;</span><span class="p">,</span><span class="n">names</span><span class="o">=</span><span class="n">titels</span><span class="p">)</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>         
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">titels</span><span class="p">)</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">isFirstLocation</span><span class="p">:</span>
                     <span class="n">stations</span> <span class="o">=</span> <span class="n">data</span>
                     <span class="n">isFirstLocation</span> <span class="o">=</span> <span class="bp">False</span>
@@ -288,9 +286,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stations</span> <span class="o">=</span> <span class="n">stations</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
-</div>
-<div class="viewcode-block" id="KnmiStation.download"><a class="viewcode-back" href="../../../gwtsa.imports.html#gwtsa.imports.knmidata.KnmiStation.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="KnmiStation.download"><a class="viewcode-back" href="../../../pasta.read.html#pasta.read.knmidata.KnmiStation.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://projects.knmi.nl/klimatologie/daggegevens/getdata_dag.cgi&#39;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stns</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stns</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>

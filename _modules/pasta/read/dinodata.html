@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gwtsa.imports.dinodata &mdash; PASTA 0.0.1 documentation</title>
+    <title>pasta.read.dinodata &mdash; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -89,18 +89,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for gwtsa.imports.dinodata</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Created on Thu Mar 17 12:07:42 2016</span>
-
+  <h1>Source code for pasta.read.dinodata</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">@author: ruben</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
 
-<div class="viewcode-block" id="DinoGrondwaterstand"><a class="viewcode-back" href="../../../gwtsa.imports.html#gwtsa.imports.dinodata.DinoGrondwaterstand">[docs]</a><span class="k">class</span> <span class="nc">DinoGrondwaterstand</span><span class="p">:</span>
+<div class="viewcode-block" id="DinoGrondwaterstand"><a class="viewcode-back" href="../../../pasta.read.html#pasta.read.dinodata.DinoGrondwaterstand">[docs]</a><span class="k">class</span> <span class="nc">DinoGrondwaterstand</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="c1"># f = open(fname, &#39;r&#39;)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;U&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gwtsa.checks &mdash; PASTA 0.0.1 documentation</title>
+    <title>pasta.checks &mdash; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -89,7 +89,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for gwtsa.checks</h1><div class="highlight"><pre>
+  <h1>Source code for pasta.checks</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">checks module</span>
 <span class="sd">    This module is used to check the time series.</span>
@@ -98,7 +98,7 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
 
-<div class="viewcode-block" id="check_oseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.checks.check_oseries">[docs]</a><span class="k">def</span> <span class="nf">check_oseries</span><span class="p">(</span><span class="n">oseries</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="check_oseries"><a class="viewcode-back" href="../../pasta.html#pasta.checks.check_oseries">[docs]</a><span class="k">def</span> <span class="nf">check_oseries</span><span class="p">(</span><span class="n">oseries</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check the observed time series before running a simulation.</span>
 
 <span class="sd">    Parameters</span>
@@ -149,10 +149,10 @@
             <span class="k">print</span> <span class="s1">&#39;User-defined option for fillnan </span><span class="si">%s</span><span class="s1"> isinstance() not supported&#39;</span> \
                   <span class="o">%</span> <span class="n">fillnan</span>
 
-    <span class="k">return</span> <span class="n">oseries</span>
+    <span class="k">return</span> <span class="n">oseries</span></div>
 
-</div>
-<div class="viewcode-block" id="check_tseries"><a class="viewcode-back" href="../../gwtsa.html#gwtsa.checks.check_tseries">[docs]</a><span class="k">def</span> <span class="nf">check_tseries</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">):</span>
+
+<div class="viewcode-block" id="check_tseries"><a class="viewcode-back" href="../../pasta.html#pasta.checks.check_tseries">[docs]</a><span class="k">def</span> <span class="nf">check_tseries</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Check the stress series when creating a time series model.</span>
 
 <span class="sd">    Parameters</span>
