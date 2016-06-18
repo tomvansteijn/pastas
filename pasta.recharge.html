@@ -37,6 +37,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
         <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
@@ -52,8 +55,8 @@
           <div class="sphinxsidebarwrapper">
               <h3><a href="#">Project Info</a></h3>
               <p>Version:<b> 0.0.1 </b></p>
-              <a href="https://travis-ci.org/gwtsa/gwtsa"><img
-        src="https://travis-ci.org/gwtsa/gwtsa.svg?branch=master" border="0"
+              <a href="https://travis-ci.org/pastas/pasta"><img
+        src="https://travis-ci.org/pastas/pasta.svg?branch=master" border="0"
         alt="Travis Status">
               </a>
           </div>
@@ -66,10 +69,15 @@
 <li><a class="reference internal" href="#">pasta.recharge package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#pasta-recharge-cythonize-module">pasta.recharge.cythonize module</a></li>
-<li><a class="reference internal" href="#pasta-recharge-recharge-module">pasta.recharge.recharge module</a></li>
+<li><a class="reference internal" href="#module-pasta.recharge.recharge">pasta.recharge.recharge module</a></li>
 <li><a class="reference internal" href="#id1">pasta.recharge.recharge module</a></li>
-<li><a class="reference internal" href="#pasta-recharge-recharge-func-module">pasta.recharge.recharge_func module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-pasta.recharge.recharge_func">pasta.recharge.recharge_func module</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pasta.recharge">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -112,17 +120,197 @@
 <div class="section" id="pasta-recharge-cythonize-module">
 <h2>pasta.recharge.cythonize module<a class="headerlink" href="#pasta-recharge-cythonize-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="pasta-recharge-recharge-module">
-<h2>pasta.recharge.recharge module<a class="headerlink" href="#pasta-recharge-recharge-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-pasta.recharge.recharge">
+<span id="pasta-recharge-recharge-module"></span><h2>pasta.recharge.recharge module<a class="headerlink" href="#module-pasta.recharge.recharge" title="Permalink to this headline">¶</a></h2>
+<p>Created on Wed Apr 15 18:20:35 2015</p>
+<p>This python script is used to solve the differential equations that are used for the
+unsaturated zone module. The output of the function is the soil state (how full
+it is) at each timestep, and the groundwater recharge N.</p>
+<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-Three models can be used:
+- Percolation Flow:
+dS/dt = Pe[t] - Kp * (Sr/Srmax)**Gamma - Epu * min(1, Sr/0.5Srmax)</p>
+<ul class="simple">
+<li>Preferential Flow:</li>
+</ul>
+<p>dS/ Dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta)- Epu * min(1, Sr/0.5Srmax)</p>
+<ul class="simple">
+<li>Combination:</li>
+</ul>
+<dl class="docutils">
+<dt>dS/ Dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta) - Kp * (Sr/Srmax)**Gamma - Epu</dt>
+<dd><ul class="first last simple">
+<li>min(1, Sr/0.5*Srmax)</li>
+</ul>
+</dd>
+</dl>
+<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-Numerical info:
+The Soil module is solved with an implicit euler and Newton Raphson iteration.
+The initial estimate for the the NR-iteration is provided by an Explicit Euler
+solution of the above differential equation.</p>
+<dl class="docutils">
+<dt>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-To Do:</dt>
+<dd><ul class="first last simple">
+<li>Built in more external / internal checks for water balance</li>
+</ul>
+</dd>
+</dl>
+<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-References:     
+- Kavetski, D., Kuczera, G. &amp; Franks, S.W. [2006]. Calibration of conceptual
+hydrological models revisited: 1. Overcoming numerical artefacts.
+Journal of Hydrology, 320, p. 173-186.</p>
+<p>&#64;author: Raoul Collenteur</p>
 </div>
 <div class="section" id="id1">
 <h2>pasta.recharge.recharge module<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-pasta.recharge.recharge"></span><p>Created on Wed Apr 15 18:20:35 2015</p>
+<p>This python script is used to solve the differential equations that are used for the
+unsaturated zone module. The output of the function is the soil state (how full
+it is) at each timestep, and the groundwater recharge N.</p>
+<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-Three models can be used:
+- Percolation Flow:
+dS/dt = Pe[t] - Kp * (Sr/Srmax)**Gamma - Epu * min(1, Sr/0.5Srmax)</p>
+<ul class="simple">
+<li>Preferential Flow:</li>
+</ul>
+<p>dS/ Dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta)- Epu * min(1, Sr/0.5Srmax)</p>
+<ul class="simple">
+<li>Combination:</li>
+</ul>
+<dl class="docutils">
+<dt>dS/ Dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta) - Kp * (Sr/Srmax)**Gamma - Epu</dt>
+<dd><ul class="first last simple">
+<li>min(1, Sr/0.5*Srmax)</li>
+</ul>
+</dd>
+</dl>
+<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-Numerical info:
+The Soil module is solved with an implicit euler and Newton Raphson iteration.
+The initial estimate for the the NR-iteration is provided by an Explicit Euler
+solution of the above differential equation.</p>
+<dl class="docutils">
+<dt>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-To Do:</dt>
+<dd><ul class="first last simple">
+<li>Built in more external / internal checks for water balance</li>
+</ul>
+</dd>
+</dl>
+<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-References:     
+- Kavetski, D., Kuczera, G. &amp; Franks, S.W. [2006]. Calibration of conceptual
+hydrological models revisited: 1. Overcoming numerical artefacts.
+Journal of Hydrology, 320, p. 173-186.</p>
+<p>&#64;author: Raoul Collenteur</p>
 </div>
-<div class="section" id="pasta-recharge-recharge-func-module">
-<h2>pasta.recharge.recharge_func module<a class="headerlink" href="#pasta-recharge-recharge-func-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-pasta.recharge.recharge_func">
+<span id="pasta-recharge-recharge-func-module"></span><h2>pasta.recharge.recharge_func module<a class="headerlink" href="#module-pasta.recharge.recharge_func" title="Permalink to this headline">¶</a></h2>
+<p>recharge_func module
+Contains the classes for the different models that are available to calculate the
+recharge from evaporation and precipitation data.</p>
+<p>Each Recharge class contains at least the following:</p>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>nparam: int</dt>
+<dd>Number of parameters needed for this model.</dd>
+</dl>
 </div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>set_parameters(self, name)</dt>
+<dd>A function that returns a Pandas DataFrame of the parameters of the
+recharge function. Columns of the dataframe need to be [&#8216;value&#8217;, &#8216;pmin&#8217;,
+&#8216;pmax&#8217;, &#8216;vary&#8217;]. Rows of the DataFrame have names of the parameters. Input
+name is used as a prefix. This function is called by a Tseries object.</dd>
+<dt>simulate(self, evaporation, precipitation, p=None)</dt>
+<dd>A function that returns an array of the simulated recharge series.</dd>
+</dl>
+</div>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<p>[1] R.A. Collenteur [2016] Non-linear time series analysis of deep groundwater
+levels: Application to the Veluwe. MSc. thesis, TU Delft.
+<a class="reference external" href="http://repository.tudelft.nl/view/ir/uuid:baf4fc8c-6311-407c-b01f-c80a96ecd584/">http://repository.tudelft.nl/view/ir/uuid:baf4fc8c-6311-407c-b01f-c80a96ecd584/</a></p>
+<dl class="class">
+<dt id="pasta.recharge.recharge_func.Combination">
+<em class="property">class </em><code class="descclassname">pasta.recharge.recharge_func.</code><code class="descname">Combination</code><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Combination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Combination" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combination flow recharge model</p>
+<p>Other water balance for the root zone is calculated as:</p>
+<p>dS/ dt = Pe[t] * (1 - (Sr[t] / Srmax)**Beta) - Kp * (Sr / Srmax)**Gamma -
+Epu * min(1, Sr/ (0.5 * Srmax))</p>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="pasta.recharge.recharge_func.Combination.set_parameters">
+<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Combination.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Combination.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pasta.recharge.recharge_func.Combination.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>precip</em>, <em>evap</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Combination.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Combination.simulate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pasta.recharge.recharge_func.Linear">
+<em class="property">class </em><code class="descclassname">pasta.recharge.recharge_func.</code><code class="descname">Linear</code><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear recharge model</p>
+<p>The recharge to the groundwater is calculated as:
+R = P - f * E</p>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="pasta.recharge.recharge_func.Linear.set_parameters">
+<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Linear.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Linear.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pasta.recharge.recharge_func.Linear.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>precip</em>, <em>evap</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Linear.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Linear.simulate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pasta.recharge.recharge_func.Percolation">
+<em class="property">class </em><code class="descclassname">pasta.recharge.recharge_func.</code><code class="descname">Percolation</code><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Percolation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Percolation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Percolation flow recharge model</p>
+<p>Other water balance for the root zone s calculated as:</p>
+<p>dS/dt = Pe - Kp * (Sr / Srmax)**Gamma - Epu * min(1, Sr / (0.5 * Srmax))</p>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="pasta.recharge.recharge_func.Percolation.set_parameters">
+<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Percolation.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Percolation.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pasta.recharge.recharge_func.Percolation.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>precip</em>, <em>evap</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Percolation.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Percolation.simulate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pasta.recharge.recharge_func.Preferential">
+<em class="property">class </em><code class="descclassname">pasta.recharge.recharge_func.</code><code class="descname">Preferential</code><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Preferential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Preferential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preferential flow recharge model</p>
+<p>The water balance for the root zone is calculated as:
+dS / dt = Pe * (1 - (Sr / Srmax)**Beta)- Epu * min(1, Sr / (0.5 * Srmax))</p>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="pasta.recharge.recharge_func.Preferential.set_parameters">
+<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Preferential.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Preferential.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pasta.recharge.recharge_func.Preferential.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>precip</em>, <em>evap</em>, <em>p=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/recharge/recharge_func.html#Preferential.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.recharge.recharge_func.Preferential.simulate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-pasta.recharge">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pasta.recharge" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -139,6 +327,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
         <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
