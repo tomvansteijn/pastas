@@ -1,0 +1,726 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pastas.model &#8212; PASTA 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PASTA 0.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+
+<div class="sidebar">
+      <div class="sphinxsidebar">
+          <div class="sphinxsidebarwrapper">
+              <h3><a href="#">Project Info</a></h3>
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
+        alt="Travis Status">
+              </a>
+
+
+          </div>
+      </div>
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pastas.model</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">plticker</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">.checks</span> <span class="k">import</span> <span class="n">check_oseries</span>
+<span class="kn">from</span> <span class="nn">.solver</span> <span class="k">import</span> <span class="n">LmfitSolve</span>
+<span class="kn">from</span> <span class="nn">.stats</span> <span class="k">import</span> <span class="n">Statistics</span>
+<span class="kn">from</span> <span class="nn">.tseries</span> <span class="k">import</span> <span class="n">Constant</span>
+
+
+<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oseries</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">warmup</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">fillnan</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">,</span> <span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiates a time series model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        oseries: pd.Series</span>
+<span class="sd">            pandas Series object containing the dependent time series. The</span>
+<span class="sd">            observation can be non-equidistant.</span>
+<span class="sd">        xy: Optional[tuple]</span>
+<span class="sd">            XY location of the oseries in lat-lon format.</span>
+<span class="sd">        metadata: Optional[dict]</span>
+<span class="sd">            Dictionary containing metadata of the model.</span>
+<span class="sd">        freq: Optional[str]</span>
+<span class="sd">            String containing the desired frequency. By default freq=None and the</span>
+<span class="sd">            observations are used as they are. The required string format is found</span>
+<span class="sd">            at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">            -aliases</span>
+<span class="sd">        warmup: Optional[float]</span>
+<span class="sd">            Number of days used for warmup</span>
+<span class="sd">        fillnan: Optional[str or float]</span>
+<span class="sd">            Methods or float number to fill nan-values. Default values is</span>
+<span class="sd">            &#39;drop&#39;. Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">            &#39;mean&#39; and, &#39;drop&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">            interpolation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span> <span class="o">=</span> <span class="n">check_oseries</span><span class="p">(</span><span class="n">oseries</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warmup</span> <span class="o">=</span> <span class="n">warmup</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="n">xy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">odelt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">/</span> \
+                     <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_offset</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Independent of the time unit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">constant</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_constant</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">constant</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Min and max time of observation series</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">otmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">otmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">Statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Model.add_tseries"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.add_tseries">[docs]</a>    <span class="k">def</span> <span class="nf">add_tseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tseries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a time series model component to the Model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="p">[</span><span class="n">tseries</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tseries</span></div>
+
+<div class="viewcode-block" id="Model.add_noisemodel"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.add_noisemodel">[docs]</a>    <span class="k">def</span> <span class="nf">add_noisemodel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noisemodel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a noise model to the time series Model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="o">=</span> <span class="n">noisemodel</span></div>
+
+<div class="viewcode-block" id="Model.add_constant"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.add_constant">[docs]</a>    <span class="k">def</span> <span class="nf">add_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a Constant to the time series Model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">constant</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">min</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Model.simulate"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t: Optional[pd.series.index]</span>
+<span class="sd">            Time indices to use for the simulation of the time series model.</span>
+<span class="sd">        p: Optional[array]</span>
+<span class="sd">            Array of the parameters used in the time series model.</span>
+<span class="sd">        noise:</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pandas Series object containing the simulated time series.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Default option when not tmin and tmax is provided</span>
+        <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span>
+        <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">tmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">tmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;model needs to be solved first&#39;</span>
+
+        <span class="n">tindex</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">tmin</span><span class="p">)</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">DateOffset</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">warmup</span><span class="p">),</span> <span class="n">tmax</span><span class="p">,</span>
+            <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dt</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">optimal</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">tindex</span><span class="p">)</span>
+        <span class="n">istart</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Track parameters index to pass to ts object</span>
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">h</span> <span class="o">+=</span> <span class="n">ts</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">istart</span><span class="p">:</span> <span class="n">istart</span> <span class="o">+</span> <span class="n">ts</span><span class="o">.</span><span class="n">nparam</span><span class="p">],</span> <span class="n">tindex</span><span class="p">,</span>
+                             <span class="n">dt</span><span class="p">)</span>
+            <span class="n">istart</span> <span class="o">+=</span> <span class="n">ts</span><span class="o">.</span><span class="n">nparam</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">istart</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">h</span><span class="p">[</span><span class="n">tmin</span><span class="p">:]</span></div>
+
+<div class="viewcode-block" id="Model.residuals"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.residuals">[docs]</a>    <span class="k">def</span> <span class="nf">residuals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span>
+                  <span class="n">noise</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to calculate the residuals.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">tindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tmin</span><span class="p">:</span> <span class="n">tmax</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>  <span class="c1"># times used for calibration</span>
+
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">optimal</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># h_observed - h_simulated</span>
+        <span class="n">h_observed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="n">simulation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tindex</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">simulation</span><span class="o">.</span><span class="n">index</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># all of the observation indexes are in the simulation</span>
+            <span class="n">h_simulated</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># interpolate simulation to measurement-times</span>
+            <span class="n">h_simulated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">h_observed</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">asi8</span><span class="p">,</span>
+                                    <span class="n">simulation</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">asi8</span><span class="p">,</span> <span class="n">simulation</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">h_observed</span> <span class="o">-</span> <span class="n">h_simulated</span>
+        <span class="k">if</span> <span class="n">noise</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">odelt</span><span class="p">[</span><span class="n">tindex</span><span class="p">],</span>
+                                         <span class="n">parameters</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span><span class="o">.</span><span class="n">nparam</span><span class="p">:],</span>
+                                         <span class="n">tindex</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">r</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;nan problem in residuals&#39;</span><span class="p">)</span>  <span class="c1"># quick and dirty check</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">[</span><span class="n">tmin</span><span class="p">:]</span></div>
+
+<div class="viewcode-block" id="Model.initialize"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">initial</span><span class="p">:</span>
+            <span class="n">optimal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">optimal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">nparam</span> <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span><span class="o">.</span><span class="n">nparam</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;initial&#39;</span><span class="p">,</span> <span class="s1">&#39;pmin&#39;</span><span class="p">,</span> <span class="s1">&#39;pmax&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;vary&#39;</span><span class="p">,</span> <span class="s1">&#39;optimal&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="ow">and</span> <span class="n">noise</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">initial</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">optimal</span></div>
+
+<div class="viewcode-block" id="Model.solve"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">LmfitSolve</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+              <span class="n">noise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Methods to solve the time series model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tmin: Optional[str]</span>
+<span class="sd">            String with a start date for the simulation period (E.g. &#39;1980&#39;)</span>
+<span class="sd">        tmax: Optional[str]</span>
+<span class="sd">            String with an end date for the simulation period (E.g. &#39;2010&#39;)</span>
+<span class="sd">        solver: Optional[solver class]</span>
+<span class="sd">            Class used to solve the model. Default is lmfit (LmfitSolve)</span>
+<span class="sd">        report: Boolean</span>
+<span class="sd">            Print a report to the screen after optimization finished.</span>
+<span class="sd">        noise: Boolean</span>
+<span class="sd">            Use the nose model (True) or not (False).</span>
+<span class="sd">        initialize: Boolean</span>
+<span class="sd">            Reset initial parameters.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">noise</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisemodel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;Warning, solution with noise model while noise model is not &#39;</span>
+                <span class="s1">&#39;defined. No noise model is used&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check frequency of tseries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_frequency</span><span class="p">()</span>
+
+        <span class="c1"># Check series with tmin, tmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_tmin_tmax</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+
+        <span class="c1"># Initialize parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">initial</span><span class="o">=</span><span class="n">initial</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="n">noise</span><span class="p">)</span>
+
+        <span class="c1"># Solve model</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="n">solver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
+                     <span class="n">freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">optimal</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">optimal_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">report</span>
+        <span class="k">if</span> <span class="n">report</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">)</span></div>
+
+        <span class="c1"># self.stats = Statistics(self)</span>
+
+<div class="viewcode-block" id="Model.set_tmin_tmax"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.set_tmin_tmax">[docs]</a>    <span class="k">def</span> <span class="nf">set_tmin_tmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to check if the dependent and independent time series match.</span>
+
+<span class="sd">        - tmin and tmax are in oseries.index for optimization.</span>
+<span class="sd">        - all the stresses are available for simulation between tmin and tmax.</span>
+<span class="sd">        -</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tmin</span>
+<span class="sd">        tmax</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Store tmax and tmin. If none is provided, use oseries to set them.</span>
+        <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmin</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">tslib</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">tmin</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tmin</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Specified tmin is before first observation &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">assert</span> <span class="n">tmin</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="p">[</span>
+                <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Error: Specified tmin is after last observation&#39;</span>
+        <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmax</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">tslib</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">tmax</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tmax</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Specified tmax is after last observation &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">assert</span> <span class="n">tmax</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="p">[</span>
+                <span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Error: Specified tmax is before first observation&#39;</span>
+
+        <span class="c1"># adjust tmin and tmax, so that all the tseries cover the period</span>
+        <span class="k">for</span> <span class="n">tseries</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">tseries</span><span class="o">.</span><span class="n">tmin</span> <span class="o">&gt;</span> <span class="n">tmin</span><span class="p">:</span>
+                <span class="n">tmin</span> <span class="o">=</span> <span class="n">tseries</span><span class="o">.</span><span class="n">tmin</span>
+            <span class="k">if</span> <span class="n">tseries</span><span class="o">.</span><span class="n">tmax</span> <span class="o">&lt;</span> <span class="n">tmax</span><span class="p">:</span>
+                <span class="n">tmax</span> <span class="o">=</span> <span class="n">tseries</span><span class="o">.</span><span class="n">tmax</span>
+
+        <span class="c1"># adjust tmin and tmax so that the time-offset (determined in check_frequency) is equal to that of the tseries</span>
+        <span class="n">tmin</span> <span class="o">=</span> <span class="n">tmin</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_time_offset</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_offset</span>
+        <span class="n">tmax</span> <span class="o">=</span> <span class="n">tmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_time_offset</span><span class="p">(</span><span class="n">tmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_offset</span>
+
+        <span class="k">assert</span> <span class="n">tmax</span> <span class="o">&gt;</span> <span class="n">tmin</span><span class="p">,</span> <span class="s1">&#39;Error: Specified tmax not larger than specified tmin&#39;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span>
+                   <span class="n">tmin</span><span class="p">:</span> <span class="n">tmax</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Error: no observations between tmin and tmax&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="n">tmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">=</span> <span class="n">tmax</span></div>
+
+<div class="viewcode-block" id="Model.check_frequency"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.check_frequency">[docs]</a>    <span class="k">def</span> <span class="nf">check_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Methods to check if the frequency is:</span>
+
+<span class="sd">        1. The frequency should be the same for all tseries</span>
+<span class="sd">        2. tseries timestamps should match (e.g. similar hours)</span>
+<span class="sd">        3. freq of the tseries is lower than the max tdelta of the oseries</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># calculate frequency and time-difference with default frequency</span>
+        <span class="n">freqs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">time_offsets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">tseries</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">freqs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tseries</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span>
+            <span class="c1"># calculate the offset from the default frequency</span>
+            <span class="n">time_offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_time_offset</span><span class="p">(</span><span class="n">tseries</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                               <span class="n">tseries</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span>
+            <span class="n">time_offsets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">time_offset</span><span class="p">)</span>
+
+        <span class="c1"># 1. The frequency should be the same for all tseries</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">freqs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;The frequency of the tseries is not the &#39;</span> \
+                                <span class="s1">&#39;same for all stresses.&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">freqs</span><span class="p">))</span>
+
+        <span class="c1"># 2. tseries timestamps should match (e.g. similar hours&#39;)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span>
+            <span class="n">time_offsets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;The time-differences with the default frequency is&#39;</span> \
+                                <span class="s1">&#39; not the same for all stresses.&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_offset</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">time_offsets</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Model.get_dt"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.get_dt">[docs]</a>    <span class="k">def</span> <span class="nf">get_dt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;W&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>  <span class="c1"># weekly frequency</span>
+                   <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># calendar day frequency</span>
+                   <span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">24</span><span class="p">,</span>  <span class="c1"># hourly frequency</span>
+                   <span class="s1">&#39;T&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">24</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span>  <span class="c1"># minutely frequency</span>
+                   <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">24</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span>  <span class="c1"># minutely frequency</span>
+                   <span class="s1">&#39;S&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">24</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">,</span>  <span class="c1"># secondly frequency</span>
+                   <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">24</span> <span class="o">/</span> <span class="mi">3600000</span><span class="p">,</span>  <span class="c1"># milliseconds</span>
+                   <span class="s1">&#39;ms&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">24</span> <span class="o">/</span> <span class="mi">3600000</span><span class="p">,</span>  <span class="c1"># milliseconds</span>
+                   <span class="p">}</span>
+        <span class="c1"># remove the day from the week</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">freq</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">options</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Model.get_time_offset"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.get_time_offset">[docs]</a>    <span class="k">def</span> <span class="nf">get_time_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+            <span class="c1"># Take the first timestep. The rest of index has the same offset,</span>
+            <span class="c1"># as the frequency is constant.</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># define the function blocks</span>
+        <span class="k">def</span> <span class="nf">calc_week_offset</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">weekday</span><span class="p">(),</span> <span class="n">hours</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span>
+                                      <span class="n">minutes</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">second</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">calc_day_offset</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span>
+                                      <span class="n">seconds</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">second</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">calc_hour_offset</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">second</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">calc_minute_offset</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">second</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">calc_second_offset</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">microsecond</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">calc_millisecond_offset</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="c1"># t has no millisecond attribute, so use microsecond and use the remainder after division by 1000</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">microsecond</span> <span class="o">%</span> <span class="mf">1000.0</span><span class="p">)</span>
+
+        <span class="c1"># map the inputs to the function blocks</span>
+        <span class="c1"># see http://pandas.pydata.org/pandas-docs/stable/timeseries.html#timeseries-offset-aliases</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;W&#39;</span><span class="p">:</span> <span class="n">calc_week_offset</span><span class="p">,</span>  <span class="c1"># weekly frequency</span>
+                   <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="n">calc_day_offset</span><span class="p">,</span>  <span class="c1"># calendar day frequency</span>
+                   <span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="n">calc_hour_offset</span><span class="p">,</span>  <span class="c1"># hourly frequency</span>
+                   <span class="s1">&#39;T&#39;</span><span class="p">:</span> <span class="n">calc_minute_offset</span><span class="p">,</span>  <span class="c1"># minutely frequency</span>
+                   <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="n">calc_minute_offset</span><span class="p">,</span>  <span class="c1"># minutely frequency</span>
+                   <span class="s1">&#39;S&#39;</span><span class="p">:</span> <span class="n">calc_second_offset</span><span class="p">,</span>  <span class="c1"># secondly frequency</span>
+                   <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="n">calc_millisecond_offset</span><span class="p">,</span>  <span class="c1"># milliseconds</span>
+                   <span class="s1">&#39;ms&#39;</span><span class="p">:</span> <span class="n">calc_millisecond_offset</span><span class="p">,</span>  <span class="c1"># milliseconds</span>
+                   <span class="p">}</span>
+        <span class="c1"># remove the day from the week</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">freq</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">options</span><span class="p">[</span><span class="n">freq</span><span class="p">](</span><span class="n">t</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.get_contribution"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.get_contribution">[docs]</a>    <span class="k">def</span> <span class="nf">get_contribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;optimal&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Name not in tseriesdict, available names are: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                  <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Model.get_block_response"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.get_block_response">[docs]</a>    <span class="k">def</span> <span class="nf">get_block_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;optimal&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Name not in tseriesdict, available names are: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                  <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Model.get_stress"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.get_stress">[docs]</a>    <span class="k">def</span> <span class="nf">get_stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;optimal&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">__getstress__</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Name not in tseriesdict, available names are: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                  <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Model.plot"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">oseries</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">simulate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        oseries: Boolean</span>
+<span class="sd">            True to plot the observed time series.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Plot of the simulated and optionally the observed time series</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">simulate</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">otmin</span>
+            <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">otmax</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">oseries</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                              <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Model.plot_results"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.plot_results">[docs]</a>    <span class="k">def</span> <span class="nf">plot_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tmin/tmax: str</span>
+<span class="sd">            start and end time for plotting</span>
+<span class="sd">        savefig: Optional[Boolean]</span>
+<span class="sd">            True to save the figure, False is default. Figure is saved in the</span>
+<span class="sd">            current working directory when running your python scripts.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s1">&#39;Model Results&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+        <span class="c1"># Plot the Groundwater levels</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;modeled head&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                          <span class="n">label</span><span class="o">=</span><span class="s1">&#39;observed head&#39;</span><span class="p">)</span>
+        <span class="c1"># ax1.xaxis.set_visible(False)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">handlelength</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Head [m]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Plot the residuals and innovations</span>
+        <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">residuals</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># , sharex=ax1)</span>
+        <span class="n">residuals</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;residuals&#39;</span><span class="p">)</span>
+        <span class="c1"># Ruben Calje commented next three lines on 31-10-2016:</span>
+        <span class="c1"># if self.noisemodel is not None:</span>
+        <span class="c1"># innovations = self.noisemodel.simulate(residuals, self.odelt)</span>
+        <span class="c1"># innovations.plot(label=&#39;innovations&#39;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">handlelength</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Error [m]&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time [Years]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Plot the block response function</span>
+        <span class="n">ax3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;rfunc&quot;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+                <span class="n">br</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_response</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">br</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">br</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ax3</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[::</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ax3</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[::</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Block Response&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Plot the Model Parameters (Experimental)</span>
+        <span class="c1"># ax4 = plt.subplot(gs[1:2, -1])</span>
+        <span class="c1"># ax4.xaxis.set_visible(False)</span>
+        <span class="c1"># ax4.yaxis.set_visible(False)</span>
+        <span class="c1"># text = np.vstack((self.parameters.keys(), [round(float(i), 4) for i in</span>
+        <span class="c1">#                                            self.parameters.optimal.values])).T</span>
+        <span class="c1"># colLabels = (&quot;Parameter&quot;, &quot;Value&quot;)</span>
+        <span class="c1"># ytable = ax4.table(cellText=text, colLabels=colLabels, loc=&#39;center&#39;)</span>
+        <span class="c1"># ytable.scale(1, 1.1)</span>
+
+        <span class="c1"># Table of the numerical diagnostic statistics.</span>
+        <span class="n">ax5</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Ruben Calje commented next two lines on 31-10-2016:</span>
+        <span class="c1"># plt.text(0.05, 0.8, &#39;AIC: %.2f&#39; % self.fit.aic)</span>
+        <span class="c1"># plt.text(0.05, 0.6, &#39;BIC: %.2f&#39; % self.fit.bic)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">savefig</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.eps&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Model.plot_decomposition"><a class="viewcode-back" href="../../pastas.html#pastas.model.Model.plot_decomposition">[docs]</a>    <span class="k">def</span> <span class="nf">plot_decomposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Plot the decomposition of a time-series in the different stresses</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Default option when not tmin and tmax is provided</span>
+        <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span>
+        <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">tmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">tmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;model needs to be solved first&#39;</span>
+        <span class="k">if</span> <span class="n">freq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span>
+
+        <span class="n">tindex</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)</span>
+
+        <span class="c1"># determine the simulation</span>
+        <span class="n">hsim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">hsim</span><span class="p">]</span>
+
+        <span class="c1"># determine the influence of the different stresses</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">optimal</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">istart</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Track parameters index to pass to ts object</span>
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dt</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ts</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">istart</span><span class="p">:</span> <span class="n">istart</span> <span class="o">+</span> <span class="n">ts</span><span class="o">.</span><span class="n">nparam</span><span class="p">],</span> <span class="n">tindex</span><span class="p">,</span>
+                            <span class="n">dt</span><span class="p">))</span>
+            <span class="n">istart</span> <span class="o">+=</span> <span class="n">ts</span><span class="o">.</span><span class="n">nparam</span>
+
+        <span class="c1"># open the figure</span>
+        <span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># let the height of the axes be determined by the values</span>
+            <span class="c1"># height_ratios = [1]*(len(self.tseriesdict)+1)</span>
+            <span class="n">height_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">([</span><span class="n">hsim</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">hsim</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">min</span><span class="p">()])]</span>
+            <span class="k">for</span> <span class="n">ht</span> <span class="ow">in</span> <span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">height_ratios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ht</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">ht</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+            <span class="n">f</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span>
+                                        <span class="s1">&#39;height_ratios&#39;</span><span class="p">:</span> <span class="n">height_ratios</span><span class="p">})</span>
+
+        <span class="c1"># plot simulation and observations in top graph</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                          <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;observations&#39;</span><span class="p">)</span>
+        <span class="n">hsim</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;simulation&#39;</span><span class="p">)</span>
+        <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Observations and simulation&#39;</span><span class="p">)</span>
+        <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">tight</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+        <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">minorticks_off</span><span class="p">()</span>
+
+        <span class="c1"># add a legend</span>
+        <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+        <span class="n">leg</span> <span class="o">=</span> <span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">leg</span><span class="o">.</span><span class="n">get_frame</span><span class="p">()</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1"># determine the ytick-spacing of the top graph</span>
+        <span class="n">yticks</span><span class="p">,</span> <span class="n">ylabels</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">yticks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">yticks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">yticks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># plot the influence of the stresses</span>
+        <span class="n">iax</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseriesdict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">axarr</span><span class="p">[</span><span class="n">iax</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">iax</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">h</span><span class="p">[</span><span class="n">iax</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">base</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># set the ytick-spacing equal to the top graph</span>
+                <span class="n">axarr</span><span class="p">[</span><span class="n">iax</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span>
+                    <span class="n">plticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">))</span>
+
+            <span class="n">axarr</span><span class="p">[</span><span class="n">iax</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">axarr</span><span class="p">[</span><span class="n">iax</span><span class="p">]</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">tight</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">axarr</span><span class="p">[</span><span class="n">iax</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+            <span class="n">axarr</span><span class="p">[</span><span class="n">iax</span><span class="p">]</span><span class="o">.</span><span class="n">minorticks_off</span><span class="p">()</span>
+            <span class="n">iax</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># show the figure</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

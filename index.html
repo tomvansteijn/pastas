@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PASTA Introduction &mdash; PASTA 0.0.1 documentation</title>
+    <title>Introductie &#8212; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -28,7 +28,8 @@
   </head>
   <body role="document">
 <div class="header">
-<a href="#"><img src="_static/logo.png" border="0" alt="PASTA Logo" height="100px"></a>
+<a href="#"><img src="_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
 </div>
 
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,11 +42,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="#">Home</a>|&nbsp;</li>
-        <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
-       <li><a href="content.html">Documentation </a> |&nbsp;</li>
-       <li><a href="developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
@@ -54,11 +54,24 @@
       <div class="sphinxsidebar">
           <div class="sphinxsidebarwrapper">
               <h3><a href="#">Project Info</a></h3>
-              <p>Version:<b> 0.0.1 </b></p>
-              <a href="https://travis-ci.org/pastas/pasta"><img
-        src="https://travis-ci.org/pastas/pasta.svg?branch=master" border="0"
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
         alt="Travis Status">
               </a>
+
+
           </div>
       </div>
     
@@ -66,8 +79,16 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">PASTA Introduction</a><ul>
-<li><a class="reference internal" href="#quick-installation-guide">Quick installation guide</a></li>
+<li><a class="reference internal" href="#">Introductie</a><ul>
+<li><a class="reference internal" href="#pastas-what-is-it">Pastas: What is it?</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#quick-installation-guide">Quick installation guide</a><ul>
+<li><a class="reference internal" href="#stable-version">Stable version</a></li>
+<li><a class="reference internal" href="#update">Update</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#developers">Developers</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
@@ -83,14 +104,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -103,35 +121,67 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="project-introduction">
-<h1>PASTA Introduction<a class="headerlink" href="#project-introduction" title="Permalink to this headline">¶</a></h1>
-<p>PASTA is an open source python package for simulating time series in the
-field of
-hydrology. The object oriented stucture allows for the quick implementation of new
-model components. Time series models can be created, calibrated, and analysed with
-just a few lines of python code with the built-in optimization, visualisation, and
-statistical analysis tools.</p>
-<p>If you think you have found a bug in PASTA, or if you would like to suggest an
-improvement or enhancement, please submit a new Issue through the Github Issue
-tracker toward the upper-right corner of the Github repository. Pull requests will
-only be accepted on the development branch (dev) of the repository.</p>
+  <div class="section" id="introductie">
+<h1>Introductie<a class="headerlink" href="#introductie" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pastas-what-is-it">
+<h2>Pastas: What is it?<a class="headerlink" href="#pastas-what-is-it" title="Permalink to this headline">¶</a></h2>
+<p>Pastas is an open source python package for processing, simulating and analyzing
+hydrological time series (models). The object oriented stucture allows for the
+quick implementation of new model components. Time series models can be created,
+calibrated, and analysed with just a few lines of python code with the built-in
+optimization, visualisation, and statistical analysis tools.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>All examples are provided in the <a class="reference external" href="https://github.com/pastas/pastas/tree/master/examples">Examples directory</a>.
+These include Python scripts and Ipython Notebooks. HTML versions of the IPython
+notebooks can be found on the documentation website.</p>
+</div>
 <div class="section" id="quick-installation-guide">
 <h2>Quick installation guide<a class="headerlink" href="#quick-installation-guide" title="Permalink to this headline">¶</a></h2>
-<p>To get the latest development version, use:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>git clone https://github.com/pastas/pasta.git
+<p>To install Pastas, a working version of Python 2.7 or 3.5 has to be installed on
+your computer. We recommend using the <a class="reference external" href="https://www.continuum.io/downloads">Anaconda Distribution</a>
+as it includes most of the python package dependencies and the Ipython Notebook
+software to run the notebooks. However, you are free to install any Python
+distribution you want.</p>
+<div class="section" id="stable-version">
+<h3>Stable version<a class="headerlink" href="#stable-version" title="Permalink to this headline">¶</a></h3>
+<p>To get the latest stable version, use:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pastas</span>
 </pre></div>
 </div>
-<p>and install using:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>python setup.py install
+<p>or directly from Github:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pastas</span><span class="o">/</span><span class="n">pastas</span><span class="o">/</span><span class="n">zipball</span><span class="o">/</span><span class="n">master</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="update">
+<h3>Update<a class="headerlink" href="#update" title="Permalink to this headline">¶</a></h3>
+<p>To update pastas, use:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pastas</span> <span class="o">--</span><span class="n">upgrade</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Pastas depends on a number of Python packages, of which all of the necessary are
+automatically installed when using the pip install manager. To summarize, the
+following pacakges are necessary for a minimal function installation of Pasta:
+numpy&gt;=1.9, matplotlib&gt;=1.4, lmfit&gt;=0.9, pandas&gt;=0.15, scipy&gt;=0.15,
+statsmodels&gt;=0.5.</p>
+</div>
+<div class="section" id="developers">
+<h2>Developers<a class="headerlink" href="#developers" title="Permalink to this headline">¶</a></h2>
+<p>Please take a look at the <a class="reference external" href="http://pastas.github.io/pastas/developers.html">developers section</a>
+on the documentation website for more information on how to develop Pastas.</p>
 </div>
 <div class="section" id="indices-and-tables">
 <h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 </div>
@@ -153,17 +203,16 @@ only be accepted on the development branch (dev) of the repository.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="#">Home</a>|&nbsp;</li>
-        <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
-       <li><a href="content.html">Documentation </a> |&nbsp;</li>
-       <li><a href="developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

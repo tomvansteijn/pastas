@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Table of contents &mdash; PASTA 0.0.1 documentation</title>
+    <title>Table of contents &#8212; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -28,7 +28,8 @@
   </head>
   <body role="document">
 <div class="header">
-<a href="index.html"><img src="_static/logo.png" border="0" alt="PASTA Logo" height="100px"></a>
+<a href="index.html"><img src="_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
 </div>
 
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,11 +42,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
-        <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
-       <li><a href="#">Documentation </a> |&nbsp;</li>
-       <li><a href="developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="#">Documentation </a> |&nbsp;</li>
+        <li><a href="developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
@@ -54,11 +54,24 @@
       <div class="sphinxsidebar">
           <div class="sphinxsidebarwrapper">
               <h3><a href="#">Project Info</a></h3>
-              <p>Version:<b> 0.0.1 </b></p>
-              <a href="https://travis-ci.org/pastas/pasta"><img
-        src="https://travis-ci.org/pastas/pasta.svg?branch=master" border="0"
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
         alt="Travis Status">
               </a>
+
+
           </div>
       </div>
     
@@ -74,14 +87,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -98,22 +108,20 @@
 <h1>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">PASTA Introduction</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Introductie</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#pastas-what-is-it">Pastas: What is it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#quick-installation-guide">Quick installation guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#developers">Developers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Downloading and Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#downloading">Downloading</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#development-version">Development Version</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#examples">Examples</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">pasta</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pasta.html">pasta package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/1_basic_model.html">A Basic Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/2_two_series.html">Model with two time series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/3_recharge_series.html">Recharge Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#short-example">Short Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Developers guide</a><ul>
@@ -121,6 +129,10 @@
 <li class="toctree-l2"><a class="reference internal" href="developers.html#bug-reports">Bug reports</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developers.html#writing-documentation">Writing documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developers.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pastas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pastas.html">pastas package</a></li>
 </ul>
 </li>
 </ul>
@@ -144,17 +156,16 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
-        <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
-       <li><a href="#">Documentation </a> |&nbsp;</li>
-       <li><a href="developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="#">Documentation </a> |&nbsp;</li>
+        <li><a href="developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

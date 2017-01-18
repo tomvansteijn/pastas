@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pasta.read package &mdash; PASTA 0.0.1 documentation</title>
+    <title>pasta.read package &#8212; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -28,7 +28,8 @@
   </head>
   <body role="document">
 <div class="header">
-<a href="index.html"><img src="_static/logo.png" border="0" alt="PASTA Logo" height="100px"></a>
+<a href="index.html"><img src="_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
 </div>
 
     <div class="related" role="navigation" aria-label="related navigation">
@@ -54,11 +55,24 @@
       <div class="sphinxsidebar">
           <div class="sphinxsidebarwrapper">
               <h3><a href="#">Project Info</a></h3>
-              <p>Version:<b> 0.0.1 </b></p>
-              <a href="https://travis-ci.org/pastas/pasta"><img
-        src="https://travis-ci.org/pastas/pasta.svg?branch=master" border="0"
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
         alt="Travis Status">
               </a>
+
+
           </div>
       </div>
     
@@ -68,10 +82,10 @@
   <ul>
 <li><a class="reference internal" href="#">pasta.read package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-pasta.read.dinodata">pasta.read.dinodata module</a></li>
-<li><a class="reference internal" href="#module-pasta.read.knmidata">pasta.read.knmidata module</a></li>
-<li><a class="reference internal" href="#module-pasta.read.read_series">pasta.read.read_series module</a></li>
-<li><a class="reference internal" href="#module-pasta.read">Module contents</a></li>
+<li><a class="reference internal" href="#pasta-read-dinodata-module">pasta.read.dinodata module</a></li>
+<li><a class="reference internal" href="#pasta-read-knmidata-module">pasta.read.knmidata module</a></li>
+<li><a class="reference internal" href="#pasta-read-read-series-module">pasta.read.read_series module</a></li>
+<li><a class="reference internal" href="#module-contents">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -86,14 +100,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -111,72 +122,17 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-pasta.read.dinodata">
-<span id="pasta-read-dinodata-module"></span><h2>pasta.read.dinodata module<a class="headerlink" href="#module-pasta.read.dinodata" title="Permalink to this headline">¶</a></h2>
-<p>&#64;author: ruben</p>
-<dl class="class">
-<dt id="pasta.read.dinodata.DinoGrondwaterstand">
-<em class="property">class </em><code class="descclassname">pasta.read.dinodata.</code><code class="descname">DinoGrondwaterstand</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/read/dinodata.html#DinoGrondwaterstand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.read.dinodata.DinoGrondwaterstand" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<div class="section" id="pasta-read-dinodata-module">
+<h2>pasta.read.dinodata module<a class="headerlink" href="#pasta-read-dinodata-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-pasta.read.knmidata">
-<span id="pasta-read-knmidata-module"></span><h2>pasta.read.knmidata module<a class="headerlink" href="#module-pasta.read.knmidata" title="Permalink to this headline">¶</a></h2>
-<p>&#64;author: ruben</p>
-<dl class="class">
-<dt id="pasta.read.knmidata.KnmiStation">
-<em class="property">class </em><code class="descclassname">pasta.read.knmidata.</code><code class="descname">KnmiStation</code><span class="sig-paren">(</span><em>start=None</em>, <em>end=None</em>, <em>inseason=None</em>, <em>vars=None</em>, <em>stns=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/read/knmidata.html#KnmiStation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.read.knmidata.KnmiStation" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Methods</p>
-<dl class="method">
-<dt id="pasta.read.knmidata.KnmiStation.download">
-<code class="descname">download</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/read/knmidata.html#KnmiStation.download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.read.knmidata.KnmiStation.download" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="classmethod">
-<dt id="pasta.read.knmidata.KnmiStation.fromfile">
-<em class="property">classmethod </em><code class="descname">fromfile</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/read/knmidata.html#KnmiStation.fromfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.read.knmidata.KnmiStation.fromfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pasta.read.knmidata.KnmiStation.readdata">
-<code class="descname">readdata</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/read/knmidata.html#KnmiStation.readdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.read.knmidata.KnmiStation.readdata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="pasta-read-knmidata-module">
+<h2>pasta.read.knmidata module<a class="headerlink" href="#pasta-read-knmidata-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-pasta.read.read_series">
-<span id="pasta-read-read-series-module"></span><h2>pasta.read.read_series module<a class="headerlink" href="#module-pasta.read.read_series" title="Permalink to this headline">¶</a></h2>
-<p>&#64;author: ruben</p>
-<dl class="class">
-<dt id="pasta.read.read_series.ReadSeries">
-<em class="property">class </em><code class="descclassname">pasta.read.read_series.</code><code class="descname">ReadSeries</code><span class="sig-paren">(</span><em>fname</em>, <em>filetype</em>, <em>variable=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/read/read_series.html#ReadSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.read.read_series.ReadSeries" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Methods</p>
-<dl class="method">
-<dt id="pasta.read.read_series.ReadSeries.rd2wgs">
-<code class="descname">rd2wgs</code><span class="sig-paren">(</span><em>xy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pasta/read/read_series.html#ReadSeries.rd2wgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pasta.read.read_series.ReadSeries.rd2wgs" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xy: float</strong></p>
-<blockquote>
-<div><p>float of the location ???</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">XY location in lat-lon format</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
+<div class="section" id="pasta-read-read-series-module">
+<h2>pasta.read.read_series module<a class="headerlink" href="#pasta-read-read-series-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-pasta.read">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pasta.read" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -206,8 +162,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

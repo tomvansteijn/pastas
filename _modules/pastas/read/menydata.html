@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pastas.read.menydata &#8212; PASTA 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PASTA 0.0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="../../../index.html"><img src="../../../_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+
+<div class="sidebar">
+      <div class="sphinxsidebar">
+          <div class="sphinxsidebarwrapper">
+              <h3><a href="#">Project Info</a></h3>
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
+        alt="Travis Status">
+              </a>
+
+
+          </div>
+      </div>
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pastas.read.menydata</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Contains the class MenyData, which represents the data in a Menyanthes file</span>
+
+<span class="sd">Currently only the observations (H) and stresses (IN) are supported. Models (M) are ignored.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="k">as</span> <span class="nn">sio</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
+
+
+<div class="viewcode-block" id="MenyData"><a class="viewcode-back" href="../../../pastas.read.html#pastas.read.menydata.MenyData">[docs]</a><span class="k">class</span> <span class="nc">MenyData</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+        <span class="c1"># Check if file is present</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Could not find file &#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">sio</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">struct_as_record</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">squeeze_me</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">chars_as_strings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Groundwater level and surface water level - meter with respect to a reference level (e.g. NAP, TAW)</span>
+        <span class="c1"># Precipitation and evaporation - meters(flux summed starting from date of previous data entry)</span>
+        <span class="c1"># Extraction - cubic meters(flux summed starting from date of previous data entry)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mat</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">]:</span>
+            <span class="n">tindex</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">matlab2datetime</span><span class="p">(</span><span class="n">tval</span><span class="p">)</span> <span class="k">for</span> <span class="n">tval</span> <span class="ow">in</span>
+                      <span class="n">H</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]]</span>
+            <span class="c1"># measurement is used as is</span>
+            <span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">tindex</span><span class="p">)</span>
+
+            <span class="c1"># round on seconds, to get rid of conversion milliseconds</span>
+            <span class="n">series</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+
+            <span class="c1"># add to self.H</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MenyH</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">Name</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">IN</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s1">&#39;IN&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;IN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mat</span><span class="p">[</span><span class="s1">&#39;IN&#39;</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">IN</span> <span class="ow">in</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;IN&#39;</span><span class="p">]:</span>
+            <span class="n">tindex</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">matlab2datetime</span><span class="p">(</span><span class="n">tval</span><span class="p">)</span> <span class="k">for</span> <span class="n">tval</span> <span class="ow">in</span>
+                      <span class="n">IN</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]]</span>
+            <span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">IN</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">tindex</span><span class="p">)</span>
+
+            <span class="c1"># round on seconds, to get rid of conversion milliseconds</span>
+            <span class="n">series</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">IN</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;EVAP&#39;</span> <span class="ow">or</span> <span class="n">IN</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;PREC&#39;</span> <span class="ow">or</span> <span class="n">IN</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;WELL&#39;</span><span class="p">:</span>
+                <span class="c1"># in menyanthes, the flux is summed over the time-step, so devide by the timestep now</span>
+                <span class="n">step</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">/</span> <span class="n">pd</span><span class="o">.</span><span class="n">offsets</span><span class="o">.</span><span class="n">Day</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">step</span> <span class="o">=</span> <span class="n">step</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                <span class="n">series</span> <span class="o">=</span> <span class="n">series</span> <span class="o">/</span> <span class="n">step</span>
+                <span class="k">if</span> <span class="n">series</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">series</span> <span class="o">=</span> <span class="n">series</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="c1"># add to self.IN</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">IN</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MenyIN</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">IN</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">IN</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="MenyData.matlab2datetime"><a class="viewcode-back" href="../../../pastas.read.html#pastas.read.menydata.MenyData.matlab2datetime">[docs]</a>    <span class="k">def</span> <span class="nf">matlab2datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matlab_datenum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform a matlab time to a datetime, rounded to seconds</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromordinal</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">matlab_datenum</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">matlab_datenum</span><span class="p">)</span>
+        <span class="n">dayfrac</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">matlab_datenum</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span>
+            <span class="n">days</span><span class="o">=</span><span class="mi">366</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">day</span> <span class="o">+</span> <span class="n">dayfrac</span></div>
+        <span class="c1"># return self.roundTime(day + dayfrac,roundTo=1)</span>
+
+<div class="viewcode-block" id="MenyData.roundTime"><a class="viewcode-back" href="../../../pastas.read.html#pastas.read.menydata.MenyData.roundTime">[docs]</a>    <span class="k">def</span> <span class="nf">roundTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">roundTo</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Round a datetime object to any time laps in seconds</span>
+<span class="sd">        dt : datetime.datetime object, default now.</span>
+<span class="sd">        roundTo : Closest number of seconds to round to, default 1 second.</span>
+<span class="sd">        Author: Thierry Husson 2012 - Use it as you want but don&#39;t blame me.</span>
+
+<span class="sd">        Not used anymore...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">seconds</span> <span class="o">=</span> <span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-</span> <span class="n">date</span><span class="o">.</span><span class="n">min</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span>
+        <span class="n">rounding</span> <span class="o">=</span> <span class="p">(</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">roundTo</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">//</span> <span class="n">roundTo</span> <span class="o">*</span> <span class="n">roundTo</span>
+        <span class="k">return</span> <span class="n">date</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rounding</span> <span class="o">-</span> <span class="n">seconds</span><span class="p">,</span> <span class="o">-</span><span class="n">date</span><span class="o">.</span><span class="n">microsecond</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MenyH"><a class="viewcode-back" href="../../../pastas.read.html#pastas.read.menydata.MenyH">[docs]</a><span class="k">class</span> <span class="nc">MenyH</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">series</span> <span class="o">=</span> <span class="n">series</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="MenyIN"><a class="viewcode-back" href="../../../pastas.read.html#pastas.read.menydata.MenyIN">[docs]</a><span class="k">class</span> <span class="nc">MenyIN</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">series</span> <span class="o">=</span> <span class="n">series</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

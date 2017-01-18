@@ -1,0 +1,676 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pastas.tseries &#8212; PASTA 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PASTA 0.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+
+<div class="sidebar">
+      <div class="sphinxsidebar">
+          <div class="sphinxsidebarwrapper">
+              <h3><a href="#">Project Info</a></h3>
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
+        alt="Travis Status">
+              </a>
+
+
+          </div>
+      </div>
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pastas.tseries</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">tseries module</span>
+<span class="sd">    Constains class for time series objects.</span>
+
+<span class="sd">    Each response function class needs the following:</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nparam : int</span>
+<span class="sd">        Number of parameters.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Name of this tseries object. Used as prefix for the parameters.</span>
+<span class="sd">    parameters : pandas Dataframe</span>
+<span class="sd">        Dataframe containing the parameters.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    simulate : Returns pandas Series Object with simulate values</span>
+<span class="sd">               Input: tindex: Optional pandas TimeIndex. Time index to simulate</span>
+<span class="sd">               values</span>
+<span class="sd">               p: Optional[array-like]. Parameters used for simulation. If p is not</span>
+<span class="sd">               provided, parameters attribute will be used.</span>
+<span class="sd">               Returns: pandas Series of simulated values</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">fftconvolve</span>
+
+<span class="kn">from</span> <span class="nn">.checks</span> <span class="k">import</span> <span class="n">check_tseries</span>
+<span class="kn">from</span> <span class="nn">.rfunc</span> <span class="k">import</span> <span class="n">One</span>
+
+
+<div class="viewcode-block" id="TseriesBase"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.TseriesBase">[docs]</a><span class="k">class</span> <span class="nc">TseriesBase</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Tseries Base class called by each Tseries object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span> <span class="o">=</span> <span class="n">rfunc</span><span class="p">(</span><span class="n">cutoff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">nparam</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="n">xy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="n">tmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">=</span> <span class="n">tmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stress</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TseriesBase.set_initial"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.TseriesBase.set_initial">[docs]</a>    <span class="k">def</span> <span class="nf">set_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Method to set the initial parameter value</span>
+
+<span class="sd">        Usage</span>
+<span class="sd">        -----</span>
+<span class="sd">        &gt;&gt;&gt; ts.set_initial(&#39;parametername&#39;, 200)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;initial&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="TseriesBase.set_min"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.TseriesBase.set_min">[docs]</a>    <span class="k">def</span> <span class="nf">set_min</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;pmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="TseriesBase.set_max"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.TseriesBase.set_max">[docs]</a>    <span class="k">def</span> <span class="nf">set_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;pmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="TseriesBase.fix_parameter"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.TseriesBase.fix_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">fix_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;vary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+    <span class="k">def</span> <span class="nf">__getstress__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the stress or stresses of the time series object as a pandas</span>
+<span class="sd">        DataFrame. If the time series object has multiple stresses each column</span>
+<span class="sd">        represents a stress.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        stress: pd.Dataframe()</span>
+<span class="sd">            Pandas dataframe of the stress(es)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span></div>
+
+
+<div class="viewcode-block" id="Tseries"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Tseries">[docs]</a><span class="k">class</span> <span class="nc">Tseries</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Time series model consisting of the convolution of one stress with one</span>
+<span class="sd">    response function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stress: pd.Series</span>
+<span class="sd">        pandas Series object containing the stress.</span>
+<span class="sd">    rfunc: rfunc class</span>
+<span class="sd">        Response function used in the convolution with the stess.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        Name of the stress</span>
+<span class="sd">    metadata: Optional[dict]</span>
+<span class="sd">        dictionary containing metadata about the stress.</span>
+<span class="sd">    xy: Optional[tuple]</span>
+<span class="sd">        XY location in lon-lat format used for making maps.</span>
+<span class="sd">    freq: Optional[str]</span>
+<span class="sd">        Frequency to which the stress series are transformed. By default,</span>
+<span class="sd">        the frequency is inferred from the data and that frequency is used.</span>
+<span class="sd">        The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+<span class="sd">    fillnan: Optional[str or float]</span>
+<span class="sd">        Methods or float number to fill nan-values. Default values is</span>
+<span class="sd">        &#39;mean&#39;. Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">        and &#39;mean&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">        interpolation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stress</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                 <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fillnan</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.99</span><span class="p">):</span>
+        <span class="n">stress</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">TseriesBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span>
+                             <span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+                             <span class="n">cutoff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">freqstr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">stress</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Tseries.set_init_parameters"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Tseries.set_init_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_init_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the initial parameters (back) to their default values.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tseries.simulate"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Tseries.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Simulates the head contribution.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        p: 1D array</span>
+<span class="sd">           Parameters used for simulation.</span>
+<span class="sd">        tindex: Optional[Pandas time series]</span>
+<span class="sd">           Time indices to simulate the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pandas Series Object</span>
+<span class="sd">            The simulated head contribution.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">)</span>  <span class="c1"># Why recompute?</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">fftconvolve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">)[</span>
+                      <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">npoints</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">h</span></div></div>
+
+
+<div class="viewcode-block" id="Tseries2"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Tseries2">[docs]</a><span class="k">class</span> <span class="nc">Tseries2</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Time series model consisting of the convolution of two stresses with one</span>
+<span class="sd">    response function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stress1: pd.Series</span>
+<span class="sd">        pandas Series object containing stress 1.</span>
+<span class="sd">    stress2: pd.Series</span>
+<span class="sd">        pandas Series object containing stress 2.</span>
+<span class="sd">    rfunc: rfunc class</span>
+<span class="sd">        Response function used in the convolution with the stess.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        Name of the stress</span>
+<span class="sd">    metadata: Optional[dict]</span>
+<span class="sd">        dictionary containing metadata about the stress.</span>
+<span class="sd">    xy: Optional[tuple]</span>
+<span class="sd">        XY location in lon-lat format used for making maps.</span>
+<span class="sd">    freq: Optional[str]</span>
+<span class="sd">        Frequency to which the stress series are transformed. By default,</span>
+<span class="sd">        the frequency is inferred from the data and that frequency is used.</span>
+<span class="sd">        The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+<span class="sd">    fillnan: Optional[str or float]</span>
+<span class="sd">        Methods or float number to fill nan-values. Default values is</span>
+<span class="sd">        &#39;mean&#39;. Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">        and &#39;mean&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">        interpolation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stress0</span><span class="p">,</span> <span class="n">stress1</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                 <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fillnan</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;interpolate&#39;</span><span class="p">),</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.99</span><span class="p">):</span>
+        <span class="c1"># First check the series, then determine tmin and tmax</span>
+        <span class="n">stress0</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">stress0</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">stress1</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">stress1</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillnan</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># Select indices where both series are available</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">stress0</span><span class="o">.</span><span class="n">index</span> <span class="o">&amp;</span> <span class="n">stress1</span><span class="o">.</span><span class="n">index</span>
+
+        <span class="n">TseriesBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                             <span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">cutoff</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="s2">&quot;stress0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stress0</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="s2">&quot;stress1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stress1</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">stress0</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">freqstr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Tseries2.set_init_parameters"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Tseries2.set_init_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_init_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the initial parameters back to their default values.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_f&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Tseries2.simulate"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Tseries2.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Simulates the head contribution.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        p: 1D array</span>
+<span class="sd">           Parameters used for simulation.</span>
+<span class="sd">        tindex: Optional[Pandas time series]</span>
+<span class="sd">           Time indices to simulate the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pandas Series Object</span>
+<span class="sd">            The simulated head contribution.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">)</span>  <span class="c1"># Why recompute?</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+            <span class="n">fftconvolve</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="s2">&quot;stress0&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="s2">&quot;stress1&quot;</span><span class="p">],</span>
+                <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">npoints</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">h</span></div>
+
+    <span class="k">def</span> <span class="nf">__getstress__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stress</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">stress</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">stress</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parameter to calculate the stress is unknown&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Recharge"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Recharge">[docs]</a><span class="k">class</span> <span class="nc">Recharge</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Time series model performing convolution on groundwater recharge</span>
+<span class="sd">    calculated from precipitation and evaporation with a single response function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    precip: pd.Series</span>
+<span class="sd">        pandas Series object containing the precipitation stress.</span>
+<span class="sd">    evap: pd.Series</span>
+<span class="sd">        pandas Series object containing the evaporationstress.</span>
+<span class="sd">    rfunc: rfunc class</span>
+<span class="sd">        Response function used in the convolution with the stess.</span>
+<span class="sd">    recharge: recharge_func class object</span>
+<span class="sd">    name: str</span>
+<span class="sd">        Name of the stress</span>
+<span class="sd">    metadata: Optional[dict]</span>
+<span class="sd">        dictionary containing metadata about the stress.</span>
+<span class="sd">    xy: Optional[tuple]</span>
+<span class="sd">        XY location in lon-lat format used for making maps.</span>
+<span class="sd">    freq: Optional[list of str]</span>
+<span class="sd">        Frequency to which the stress series are transformed. By default,</span>
+<span class="sd">        the frequency is inferred from the data and that frequency is used.</span>
+<span class="sd">        The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+<span class="sd">    fillnan: Optional[list of str or float]</span>
+<span class="sd">        Methods or float number to fill nan-values. Default value for</span>
+<span class="sd">        precipitation is &#39;mean&#39; and default for evaporation is &#39;interpolate&#39;.</span>
+<span class="sd">        Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">        and &#39;mean&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">        interpolation.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Please check the documentation of the recharge_func classes for more details.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] R.A. Collenteur [2016] Non-linear time series analysis of deep groundwater</span>
+<span class="sd">    levels: Application to the Veluwe. MSc. thesis, TU Delft.</span>
+<span class="sd">    http://repository.tudelft.nl/view/ir/uuid:baf4fc8c-6311-407c-b01f-c80a96ecd584/</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">recharge</span><span class="p">,</span>
+                 <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Recharge&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">freq</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                 <span class="n">fillnan</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;interpolate&#39;</span><span class="p">),</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.99</span><span class="p">):</span>
+        <span class="c1"># Check and name the time series</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">precip</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fillnan</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_P&#39;</span><span class="p">)</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="n">check_tseries</span><span class="p">(</span><span class="n">evap</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fillnan</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_E&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Select indices where both series are available</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">index</span> <span class="o">&amp;</span> <span class="n">E</span><span class="o">.</span><span class="n">index</span>
+
+        <span class="c1"># Store tmin and tmax</span>
+        <span class="n">TseriesBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                             <span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">cutoff</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="n">P</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="n">E</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">freqstr</span>
+
+        <span class="c1"># The recharge calculation needs arrays</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precip_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="n">P</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evap_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="n">E</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span> <span class="o">=</span> <span class="n">recharge</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">nparam</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span>
+
+<div class="viewcode-block" id="Recharge.set_init_parameters"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Recharge.set_init_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_init_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)])</span></div>
+
+<div class="viewcode-block" id="Recharge.simulate"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Recharge.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">],</span> <span class="n">dt</span><span class="p">)</span>  <span class="c1"># Block response</span>
+        <span class="n">rseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precip_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evap_array</span><span class="p">,</span>
+                                         <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">:])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rseries</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">fftconvolve</span><span class="p">(</span><span class="n">rseries</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">npoints</span><span class="p">],</span>
+                      <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">h</span></div>
+
+    <span class="k">def</span> <span class="nf">__getstress__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the stress or stresses of the time series object as a pandas</span>
+<span class="sd">        DataFrame. If the time series object has multiple stresses each column</span>
+<span class="sd">        represents a stress.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tindex: pd TimeIndex</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        stress: pd DataFrame</span>
+<span class="sd">            DataFrame containing the stresses with the required time indices.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If parameters are not provided, don&#39;t calculate the recharge.</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precip_array</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">evap_array</span><span class="p">,</span>
+                                             <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">nparam</span><span class="p">:])</span>
+
+            <span class="n">stress</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rseries</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                               <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">stress</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">stress</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parameter to calculate the stress is unknown&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Well"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Well">[docs]</a><span class="k">class</span> <span class="nc">Well</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Time series model consisting of the convolution of one or more stresses with</span>
+<span class="sd">    one response function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stress: list</span>
+<span class="sd">        list of pandas Series objects containing the stresses.</span>
+<span class="sd">    rfunc: rfunc class</span>
+<span class="sd">        Response function used in the convolution with the stess.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        Name of the stress</span>
+<span class="sd">    metadata: Optional[dict]</span>
+<span class="sd">        dictionary containing metadata about the stress.</span>
+<span class="sd">    xy: Optional[tuple]</span>
+<span class="sd">        XY location in lon-lat format used for making maps.</span>
+<span class="sd">    freq: Optional[str]</span>
+<span class="sd">        Frequency to which the stress series are transformed. By default,</span>
+<span class="sd">        the frequency is inferred from the data and that frequency is used.</span>
+<span class="sd">        The required string format is found</span>
+<span class="sd">        at http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset</span>
+<span class="sd">        -aliases</span>
+<span class="sd">    fillnan: Optional[str or float]</span>
+<span class="sd">        Methods or float number to fill nan-values. Default values is</span>
+<span class="sd">        &#39;mean&#39;. Currently supported options are: &#39;interpolate&#39;, float,</span>
+<span class="sd">        and &#39;mean&#39;. Interpolation is performed with a standard linear</span>
+<span class="sd">        interpolation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO implement this function</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stress</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fillna</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.99</span><span class="p">):</span>
+
+        <span class="c1"># Check stresses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stress</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">stress</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+            <span class="n">stress</span> <span class="o">=</span> <span class="p">[</span><span class="n">stress</span><span class="p">]</span>
+
+        <span class="c1"># This should maybe standard be a pd.DataFrame</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stress</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">check_tseries</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">fillna</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">freqstr</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+
+        <span class="n">TseriesBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rfunc</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+                             <span class="n">cutoff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Well.set_init_parameters"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Well.set_init_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_init_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Well.simulate"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Well.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfunc</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c1"># nparam-1 depending on rfunc</span>
+            <span class="n">h</span> <span class="o">+=</span> <span class="n">fftconvolve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">npoints</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">h</span></div></div>
+
+
+<div class="viewcode-block" id="Constant"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Constant">[docs]</a><span class="k">class</span> <span class="nc">Constant</span><span class="p">(</span><span class="n">TseriesBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A constant value that is added to the time series model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value : Optional[float]</span>
+<span class="sd">        Initial estimate of the parameter value. E.g. The minimum of the observed</span>
+<span class="sd">        series.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Constant&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                 <span class="n">pmin</span><span class="o">=-</span><span class="mi">5</span><span class="p">,</span> <span class="n">pmax</span><span class="o">=+</span><span class="mi">5</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">pmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">pmax</span>
+        <span class="n">TseriesBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">One</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span>
+                             <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">max</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Constant.set_init_parameters"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Constant.set_init_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_init_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;initial&#39;</span><span class="p">,</span> <span class="s1">&#39;pmin&#39;</span><span class="p">,</span> <span class="s1">&#39;pmax&#39;</span><span class="p">,</span> <span class="s1">&#39;vary&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;constant_d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Constant.simulate"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.Constant.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">p</span></div></div>
+
+
+<div class="viewcode-block" id="NoiseModel"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.NoiseModel">[docs]</a><span class="k">class</span> <span class="nc">NoiseModel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Noise model with exponential decay of the residual.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Calculates the innovations [1] according to:</span>
+<span class="sd">    v(t1) = r(t1) - r(t0) * exp(- (t1 - t0) / alpha)</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] von Asmuth, J. R., and M. F. P. Bierkens (2005), Modeling irregularly</span>
+<span class="sd">    spaced residual series as a continuous stochastic process, Water Resour.</span>
+<span class="sd">    Res., 41, W12404, doi:10.1029/2004WR003726.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparam</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_parameters</span><span class="p">()</span>
+
+<div class="viewcode-block" id="NoiseModel.set_init_parameters"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.NoiseModel.set_init_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_init_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;initial&#39;</span><span class="p">,</span> <span class="s1">&#39;pmin&#39;</span><span class="p">,</span> <span class="s1">&#39;pmax&#39;</span><span class="p">,</span> <span class="s1">&#39;vary&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;noise_alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">14.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;noise&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NoiseModel.set_parameters"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.NoiseModel.set_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="NoiseModel.fix_parameters"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.NoiseModel.fix_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">fix_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;vary should be 1 or 0, not </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;vary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="NoiseModel.simulate"><a class="viewcode-back" href="../../pastas.html#pastas.tseries.NoiseModel.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">delt</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">tindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        res : Pandas Series</span>
+<span class="sd">            The residual series.</span>
+<span class="sd">        delt : Pandas Series</span>
+<span class="sd">            Time steps between observations.</span>
+<span class="sd">        tindex : Optional[None]</span>
+<span class="sd">            Time indices used for simulation.</span>
+<span class="sd">        p : Optional[array-like]</span>
+<span class="sd">            Alpha parameters used by the noisemodel.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pandas Series</span>
+<span class="sd">            Series of the innovations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">innovations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">res</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="c1"># weights of innovations, see Eq. A17 in reference [1]</span>
+        <span class="n">power</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">delt</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">power</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">delt</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="n">p</span><span class="p">))))</span> <span class="o">/</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">delt</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="n">p</span><span class="p">))</span>
+        <span class="c1"># res.values is needed else it gets messed up with the dates</span>
+        <span class="n">innovations</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">delt</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">res</span><span class="o">.</span><span class="n">values</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">innovations</span> <span class="o">=</span> <span class="n">innovations</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">innovations</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pastas.stats &#8212; PASTA 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PASTA 0.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+
+<div class="sidebar">
+      <div class="sphinxsidebar">
+          <div class="sphinxsidebarwrapper">
+              <h3><a href="#">Project Info</a></h3>
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
+        alt="Travis Status">
+              </a>
+
+
+          </div>
+      </div>
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pastas.stats</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Statistics for time series models.</span>
+
+<span class="sd">Statistics can be calculated for the following time series:</span>
+<span class="sd">- Observation series</span>
+<span class="sd">- Simulated series</span>
+<span class="sd">- Residual series</span>
+<span class="sd">- Innovation series</span>
+
+<span class="sd">Each of these series can be obtained through their individual (private) get</span>
+<span class="sd">method for a specific time frame.</span>
+
+<span class="sd">two different types of statistics are provided: model statistics and</span>
+<span class="sd">descriptive statistics for each series.</span>
+
+<span class="sd">Usage</span>
+<span class="sd">-----</span>
+
+<span class="sd">&gt;&gt;&gt; ml.stats.summary()</span>
+
+<span class="sd">                                     Value</span>
+<span class="sd">Statistic</span>
+<span class="sd">Pearson R^2                       0.874113</span>
+<span class="sd">Root mean squared error           0.432442</span>
+<span class="sd">Bayesian Information Criterion  113.809120</span>
+<span class="sd">Average Deviation                 0.335966</span>
+<span class="sd">Explained variance percentage    72.701968</span>
+<span class="sd">Akaike InformationCriterion      25.327385</span>
+
+<span class="sd">TODO</span>
+<span class="sd">----</span>
+<span class="sd">- ACF for irregular timesteps</span>
+<span class="sd">- PACF for irregular timestep</span>
+<span class="sd">- Nash-Sutcliffe</span>
+<span class="sd">- portmanteau test (ljung-Box &amp; Box-Pierce)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">probplot</span>
+
+<span class="kn">from</span> <span class="nn">statsmodels.tsa.stattools</span> <span class="k">import</span> <span class="n">acf</span><span class="p">,</span> <span class="n">pacf</span>
+
+
+<div class="viewcode-block" id="Statistics"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics">[docs]</a><span class="k">class</span> <span class="nc">Statistics</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class contains all the statistical methods available.</span>
+
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    rmse</span>
+<span class="sd">    evp</span>
+<span class="sd">    avg_dev</span>
+<span class="sd">    pearson</span>
+<span class="sd">    r_corrected</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ml</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ml</span> <span class="o">=</span> <span class="n">ml</span>  <span class="c1"># Store reference to model for future use</span>
+
+    <span class="c1"># Private methods that return the series for a specified tmax and tmin</span>
+    <span class="c1"># meant for internal use.</span>
+
+    <span class="k">def</span> <span class="nf">__getresiduals__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">residuals</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">series</span>
+
+    <span class="k">def</span> <span class="nf">__getsimulated__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">series</span>
+
+    <span class="k">def</span> <span class="nf">__getinnovations__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">residuals</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">series</span>
+
+    <span class="k">def</span> <span class="nf">__getobservations__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">oseries</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">tindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tmin</span><span class="p">:</span> <span class="n">tmax</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">oseries</span><span class="p">[</span><span class="n">tindex</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">series</span>
+
+    <span class="k">def</span> <span class="nf">__getallseries__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to easily obtain all four series.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tmin</span>
+<span class="sd">        tmax</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        series: pd.Dataframe</span>
+<span class="sd">            returns pandas dataframe with all four time series.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">series</span><span class="p">[</span><span class="s2">&quot;simulated&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getsimulated__</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+        <span class="n">series</span><span class="p">[</span><span class="s2">&quot;observations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getobservations__</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+        <span class="n">series</span><span class="p">[</span><span class="s2">&quot;residuals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getresiduals__</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+        <span class="n">series</span><span class="p">[</span><span class="s2">&quot;innovations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getinnovations__</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">series</span>
+
+    <span class="c1"># The statistical functions</span>
+
+<div class="viewcode-block" id="Statistics.rmse"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.rmse">[docs]</a>    <span class="k">def</span> <span class="nf">rmse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Root mean squared error of the residuals.</span>
+
+<span class="sd">        rmse = sqrt(sum(residuals**2) / N)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getresiduals__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">res</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Statistics.sse"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.sse">[docs]</a>    <span class="k">def</span> <span class="nf">sse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getresiduals__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">res</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Statistics.avg_dev"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.avg_dev">[docs]</a>    <span class="k">def</span> <span class="nf">avg_dev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Average deviation of the residuals.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getresiduals__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Statistics.evp"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.evp">[docs]</a>    <span class="k">def</span> <span class="nf">evp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Explained variance percentage.</span>
+
+<span class="sd">        evp = (var(h) - var(res)) / var(h) * 100%</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getresiduals__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getobservations__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span></div>
+
+<div class="viewcode-block" id="Statistics.pearson"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.pearson">[docs]</a>    <span class="k">def</span> <span class="nf">pearson</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Correlation between observed and simulated series.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getsimulated__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getobservations__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">sim</span><span class="p">[</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>  <span class="c1"># Make sure to correlate the same in time.</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">obs</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Statistics.r_corrected"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.r_corrected">[docs]</a>    <span class="k">def</span> <span class="nf">r_corrected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Corrected R-squared</span>
+
+<span class="sd">        R_corrected = 1 - (n-1) / (n-N_param) * RSS/TSS</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getobservations__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getresiduals__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="n">RSS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">res</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">TSS</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">obs</span> <span class="o">-</span> <span class="n">obs</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">nparam</span><span class="p">)</span> <span class="o">*</span> <span class="n">RSS</span> <span class="o">/</span> <span class="n">TSS</span></div>
+
+<div class="viewcode-block" id="Statistics.bic"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.bic">[docs]</a>    <span class="k">def</span> <span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Bayesian Information Criterium</span>
+
+<span class="sd">        BIC = -2 log(L) + S_j log(N)</span>
+<span class="sd">        S_j : Number of free parameters</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">innovations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getinnovations__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">innovations</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">bic</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">innovations</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">nparam</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+            <span class="n">N</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bic</span></div>
+
+<div class="viewcode-block" id="Statistics.aic"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.aic">[docs]</a>    <span class="k">def</span> <span class="nf">aic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Akaike Information Criterium</span>
+
+<span class="sd">        AIC = -2 log(L) + 2 S_j</span>
+<span class="sd">        S_j : Number of free parameters</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">innovations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getinnovations__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">aic</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">innovations</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">nparam</span>
+        <span class="k">return</span> <span class="n">aic</span></div>
+
+<div class="viewcode-block" id="Statistics.acf"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.acf">[docs]</a>    <span class="k">def</span> <span class="nf">acf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Autocorrelation function.</span>
+
+<span class="sd">        TODO</span>
+<span class="sd">        ----</span>
+<span class="sd">        Compute autocorrelation for irregulat time steps.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">innovations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getinnovations__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">acf</span><span class="p">(</span><span class="n">innovations</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="n">nlags</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Statistics.pacf"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.pacf">[docs]</a>    <span class="k">def</span> <span class="nf">pacf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Partial autocorrelation function.</span>
+
+<span class="sd">        http://statsmodels.sourceforge.net/devel/_modules/statsmodels/tsa/stattools.html#acf</span>
+<span class="sd">            </span>
+<span class="sd">        TODO</span>
+<span class="sd">        ----</span>
+<span class="sd">        Compute  partial autocorrelation for irregulat time steps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">innovations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getinnovations__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pacf</span><span class="p">(</span><span class="n">innovations</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="n">nlags</span><span class="p">)</span></div>
+
+    <span class="c1"># def GHG(self, tmin=None, tmax=None, series=&#39;oseries&#39;):</span>
+    <span class="c1">#     &quot;&quot;&quot;GHG: Gemiddeld Hoog Grondwater (in Dutch)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     3 maximum groundwater level observations for each year divided by 3 times</span>
+    <span class="c1">#     the number of years.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Parameters</span>
+    <span class="c1">#     ----------</span>
+    <span class="c1">#     series: Optional[str]</span>
+    <span class="c1">#         string for the series to calculate the statistic for. Supported</span>
+    <span class="c1">#         options are: &#39;oseries&#39;.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if series == &#39;oseries&#39;:</span>
+    <span class="c1">#         x = []</span>
+    <span class="c1">#         oseries = self.__getobservations__(tmin, tmax)</span>
+    <span class="c1">#         for year in np.unique(oseries.index.year):</span>
+    <span class="c1">#             x.append(oseries[&#39;%i&#39; % year].sort_values(ascending=False,</span>
+    <span class="c1">#                                                       inplace=False)[</span>
+    <span class="c1">#                      0:3].values)</span>
+    <span class="c1">#         return np.mean(np.array(x))</span>
+    <span class="c1">#</span>
+    <span class="c1"># def GLG(self, tmin=None, tmax=None, series=&#39;oseries&#39;):</span>
+    <span class="c1">#     &quot;&quot;&quot;GLG: Gemiddeld Laag Grondwater (in Dutch)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     3 minimum groundwater level observations for each year divided by 3 times</span>
+    <span class="c1">#     the number of years.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Parameters</span>
+    <span class="c1">#     ----------</span>
+    <span class="c1">#     series: Optional[str]</span>
+    <span class="c1">#         string for the series to calculate the statistic for. Supported</span>
+    <span class="c1">#         options are: &#39;oseries&#39;.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if series == &#39;oseries&#39;:</span>
+    <span class="c1">#         x = []</span>
+    <span class="c1">#         oseries = self.__getobservations__(tmin, tmax)</span>
+    <span class="c1">#         for year in np.unique(oseries.index.year):</span>
+    <span class="c1">#             x.append(oseries[&#39;%i&#39; % year].sort_values(ascending=True,</span>
+    <span class="c1">#                                                       inplace=False)[</span>
+    <span class="c1">#                      0:3].values)</span>
+    <span class="c1">#         return np.mean(np.array(x))</span>
+
+<div class="viewcode-block" id="Statistics.descriptive"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.descriptive">[docs]</a>    <span class="k">def</span> <span class="nf">descriptive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getallseries__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+        <span class="n">series</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Statistics.plot_diagnostics"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.plot_diagnostics">[docs]</a>    <span class="k">def</span> <span class="nf">plot_diagnostics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">innovations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getinnovations__</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Autocorrelation&#39;</span><span class="p">)</span>
+        <span class="c1"># plt.axhline(0.2, &#39;--&#39;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acf</span><span class="p">())</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Partial Autocorrelation&#39;</span><span class="p">)</span>
+        <span class="c1"># plt.axhline(0.2, &#39;--&#39;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pacf</span><span class="p">())</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">innovations</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">probplot</span><span class="p">(</span><span class="n">innovations</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Statistics.summary"><a class="viewcode-back" href="../../pastas.html#pastas.stats.Statistics.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;basic&#39;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints a summary table of the model statistics. The set of statistics</span>
+<span class="sd">        that are printed are selected by a dictionary of the desired statistics.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        output: str or dict</span>
+<span class="sd">            dictionary of the desired statistics or a string with one of the</span>
+<span class="sd">            predefined sets. Supported options are: &#39;basic&#39;, &#39;all&#39;, and &#39;dutch&#39;.</span>
+<span class="sd">        tmin</span>
+
+<span class="sd">        tmax</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">basic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;evp&#39;</span><span class="p">:</span> <span class="s1">&#39;Explained variance percentage&#39;</span><span class="p">,</span> <span class="s1">&#39;rmse&#39;</span><span class="p">:</span> <span class="s1">&#39;Root mean &#39;</span>
+                                                                 <span class="s1">&#39;squared error&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;avg_dev&#39;</span><span class="p">:</span> <span class="s1">&#39;Average Deviation&#39;</span><span class="p">,</span> <span class="s1">&#39;pearson&#39;</span><span class="p">:</span> <span class="s1">&#39;Pearson R^2&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;bic&#39;</span><span class="p">:</span> <span class="s1">&#39;Bayesian Information Criterion&#39;</span><span class="p">,</span> <span class="s1">&#39;aic&#39;</span><span class="p">:</span> <span class="s1">&#39;Akaike &#39;</span>
+                                                                 <span class="s1">&#39;Information&#39;</span>
+                                                                 <span class="s1">&#39;Criterion&#39;</span><span class="p">}</span>
+
+        <span class="n">dutch</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;GHG&#39;</span><span class="p">:</span> <span class="s1">&#39;Gemiddeld Hoog Grondwater&#39;</span><span class="p">,</span> <span class="s1">&#39;GLG&#39;</span><span class="p">:</span> <span class="s1">&#39;Gemiddeld Laag &#39;</span>
+                                                            <span class="s1">&#39;Grondwater&#39;</span><span class="p">}</span>
+
+        <span class="nb">all</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;evp&#39;</span><span class="p">:</span> <span class="s1">&#39;Explained variance percentage&#39;</span><span class="p">,</span> <span class="s1">&#39;rmse&#39;</span><span class="p">:</span> <span class="s1">&#39;Root mean &#39;</span>
+                                                               <span class="s1">&#39;squared error&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;avg_dev&#39;</span><span class="p">:</span> <span class="s1">&#39;Average Deviation&#39;</span><span class="p">,</span> <span class="s1">&#39;pearson&#39;</span><span class="p">:</span> <span class="s1">&#39;Pearson R^2&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;bic&#39;</span><span class="p">:</span> <span class="s1">&#39;Bayesian Information Criterion&#39;</span><span class="p">,</span> <span class="s1">&#39;aic&#39;</span><span class="p">:</span> <span class="s1">&#39;Akaike &#39;</span>
+                                                               <span class="s1">&#39;Information&#39;</span>
+                                                               <span class="s1">&#39;Criterion&#39;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="n">statsvalue</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+            <span class="n">statsvalue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">))</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">statsvalue</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">])</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Statistic&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

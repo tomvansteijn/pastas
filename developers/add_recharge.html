@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Adding recharge classes &mdash; PASTA 0.0.1 documentation</title>
+    <title>Adding recharge classes &#8212; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -28,7 +28,8 @@
   </head>
   <body role="document">
 <div class="header">
-<a href="../index.html"><img src="../_static/logo.png" border="0" alt="PASTA Logo" height="100px"></a>
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
 </div>
 
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,11 +42,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="../index.html">Home</a>|&nbsp;</li>
-        <li><a href="../search.html">Search</a>|&nbsp;</li>
         <li><a href="../examples.html">Examples</a>|&nbsp;</li>
-       <li><a href="../content.html">Documentation </a> |&nbsp;</li>
-       <li><a href="../developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
@@ -54,11 +54,24 @@
       <div class="sphinxsidebar">
           <div class="sphinxsidebarwrapper">
               <h3><a href="#">Project Info</a></h3>
-              <p>Version:<b> 0.0.1 </b></p>
-              <a href="https://travis-ci.org/pastas/pasta"><img
-        src="https://travis-ci.org/pastas/pasta.svg?branch=master" border="0"
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
         alt="Travis Status">
               </a>
+
+
           </div>
       </div>
     
@@ -84,14 +97,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -126,14 +136,14 @@ to reduce computation times but we&#8217;ll come back to those.</p>
 <h2>The recharge_func.py classes<a class="headerlink" href="#the-recharge-func-py-classes" title="Permalink to this headline">¶</a></h2>
 <p>The classes defined in this file are the classes that are provided when a
 Recharge tseries object is created. E.g.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">Recharge</span><span class="p">(</span><span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">(),</span> <span class="n">Preferential</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">Recharge</span><span class="p">(</span><span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">(),</span> <span class="n">Preferential</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>In this section we will have a closer look at the Preferential() class from
 <cite>recharge_func.py</cite>. The class needs two methods: set_parameters() and simulate
 (). Within simulate the method the function <cite>pref</cite> is called, which contains the
 computational core for simulating the preferential recharge.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Preferential</span><span class="p">:</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Preferential</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Preferential flow recharge model</span>
 
@@ -154,7 +164,7 @@ computational core for simulating the preferential recharge.</p>
         <span class="n">parameters</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Imax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5e-3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">parameters</span>
 
-    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">precip</span><span class="p">))</span>
         <span class="n">recharge</span> <span class="o">=</span> <span class="n">pref</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">evap</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -198,17 +208,16 @@ referred to this file for further instructions.
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="../index.html">Home</a>|&nbsp;</li>
-        <li><a href="../search.html">Search</a>|&nbsp;</li>
         <li><a href="../examples.html">Examples</a>|&nbsp;</li>
-       <li><a href="../content.html">Documentation </a> |&nbsp;</li>
-       <li><a href="../developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

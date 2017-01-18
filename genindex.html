@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; PASTA 0.0.1 documentation</title>
+    <title>Index &#8212; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -29,7 +29,8 @@
   </head>
   <body role="document">
 <div class="header">
-<a href="index.html"><img src="_static/logo.png" border="0" alt="PASTA Logo" height="100px"></a>
+<a href="index.html"><img src="_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
 </div>
 
     <div class="related" role="navigation" aria-label="related navigation">
@@ -42,11 +43,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
-        <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
-       <li><a href="content.html">Documentation </a> |&nbsp;</li>
-       <li><a href="developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
@@ -55,11 +55,24 @@
       <div class="sphinxsidebar">
           <div class="sphinxsidebarwrapper">
               <h3><a href="#">Project Info</a></h3>
-              <p>Version:<b> 0.0.1 </b></p>
-              <a href="https://travis-ci.org/pastas/pasta"><img
-        src="https://travis-ci.org/pastas/pasta.svg?branch=master" border="0"
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
         alt="Travis Status">
               </a>
+
+
           </div>
       </div>
     
@@ -71,14 +84,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -103,10 +113,12 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -118,25 +130,29 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.acf">acf() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.acf">acf() (pastas.stats.Statistics method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.model.Model.addnoisemodel">addnoisemodel() (pasta.model.Model method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.add_constant">add_constant() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.model.Model.addtseries">addtseries() (pasta.model.Model method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.add_noisemodel">add_noisemodel() (pastas.model.Model method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.aic">aic() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.add_tseries">add_tseries() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.avg_dev">avg_dev() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.aic">aic() (pastas.stats.Statistics method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.stats.Statistics.avg_dev">avg_dev() (pastas.stats.Statistics method)</a>
   </dt>
 
   </dl></td>
@@ -146,26 +162,30 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.bic">bic() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.bic">bic() (pastas.stats.Statistics method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.rfunc.Exponential.block">block() (pasta.rfunc.Exponential method)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Exponential.block">block() (pastas.rfunc.Exponential method)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="pasta.html#pasta.rfunc.Gamma.block">(pasta.rfunc.Gamma method)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Gamma.block">(pastas.rfunc.Gamma method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.rfunc.Hantush.block">(pasta.rfunc.Hantush method)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Hantush.block">(pastas.rfunc.Hantush method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.rfunc.Theis.block">(pasta.rfunc.Theis method)</a>
+  <dt><a href="pastas.html#pastas.rfunc.One.block">(pastas.rfunc.One method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.rfunc.Theis.block">(pastas.rfunc.Theis method)</a>
   </dt>
 
       </dl></dd>
@@ -176,25 +196,29 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.checks.check_oseries">check_oseries() (in module pasta.checks)</a>
+  <dt><a href="pastas.html#pastas.model.Model.check_frequency">check_frequency() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.model.Model.check_series">check_series() (pasta.model.Model method)</a>
+  <dt><a href="pastas.html#pastas.checks.check_oseries">check_oseries() (in module pastas.checks)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.checks.check_tseries">check_tseries() (in module pasta.checks)</a>
+  <dt><a href="pastas.html#pastas.checks.check_tseries">check_tseries() (in module pastas.checks)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Combination">Combination (class in pasta.recharge.recharge_func)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge.comb">comb() (in module pastas.recharge.recharge)</a>, <a href="pastas.recharge.html#pastas.recharge.recharge.comb">[1]</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.tseries.Constant">Constant (class in pasta.tseries)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Combination">Combination (class in pastas.recharge.recharge_func)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.tseries.Constant">Constant (class in pastas.tseries)</a>
   </dt>
 
   </dl></td>
@@ -204,17 +228,21 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.descriptive">descriptive() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.descriptive">descriptive() (pastas.stats.Statistics method)</a>
   </dt>
 
       
-  <dt><a href="pasta.read.html#pasta.read.dinodata.DinoGrondwaterstand">DinoGrondwaterstand (class in pasta.read.dinodata)</a>
+  <dt><a href="pastas.html#pastas.solver.DESolve">DESolve (class in pastas.solver)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.read.html#pasta.read.knmidata.KnmiStation.download">download() (pasta.read.knmidata.KnmiStation method)</a>
+  <dt><a href="pastas.read.html#pastas.read.dinodata.DinoGrondwaterstand">DinoGrondwaterstand (class in pastas.read.dinodata)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.read.html#pastas.read.knmidata.KnmiStation.download">download() (pastas.read.knmidata.KnmiStation method)</a>
   </dt>
 
   </dl></td>
@@ -224,13 +252,13 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.evp">evp() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.evp">evp() (pastas.stats.Statistics method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.rfunc.Exponential">Exponential (class in pasta.rfunc)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Exponential">Exponential (class in pastas.rfunc)</a>
   </dt>
 
   </dl></td>
@@ -240,23 +268,17 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.tseries.Constant.fix_parameters">fix_parameters() (pasta.tseries.Constant method)</a>
+  <dt><a href="pastas.html#pastas.tseries.TseriesBase.fix_parameter">fix_parameter() (pastas.tseries.TseriesBase method)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="pasta.html#pasta.tseries.NoiseModel.fix_parameters">(pasta.tseries.NoiseModel method)</a>
+      
+  <dt><a href="pastas.html#pastas.tseries.NoiseModel.fix_parameters">fix_parameters() (pastas.tseries.NoiseModel method)</a>
   </dt>
 
-        
-  <dt><a href="pasta.html#pasta.tseries.TseriesBase.fix_parameters">(pasta.tseries.TseriesBase method)</a>
-  </dt>
-
-      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.read.html#pasta.read.knmidata.KnmiStation.fromfile">fromfile() (pasta.read.knmidata.KnmiStation class method)</a>
+  <dt><a href="pastas.read.html#pastas.read.knmidata.KnmiStation.fromfile">fromfile() (pastas.read.knmidata.KnmiStation class method)</a>
   </dt>
 
   </dl></td>
@@ -266,37 +288,29 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.rfunc.Gamma">Gamma (class in pasta.rfunc)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Gamma">Gamma (class in pastas.rfunc)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.get_iseries">get_iseries() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.get_block_response">get_block_response() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.get_oseries">get_oseries() (pasta.stats.Statistics method)</a>
-  </dt>
-
-      
-  <dt><a href="pasta.html#pasta.stats.Statistics.get_rseries">get_rseries() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.get_contribution">get_contribution() (pastas.model.Model method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.get_series">get_series() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.get_dt">get_dt() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.get_sseries">get_sseries() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.get_stress">get_stress() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.GHG">GHG() (pasta.stats.Statistics method)</a>
-  </dt>
-
-      
-  <dt><a href="pasta.html#pasta.stats.Statistics.GLG">GLG() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.get_time_offset">get_time_offset() (pastas.model.Model method)</a>
   </dt>
 
   </dl></td>
@@ -306,7 +320,17 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.rfunc.Hantush">Hantush (class in pasta.rfunc)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Hantush">Hantush (class in pastas.rfunc)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="pastas.html#pastas.model.Model.initialize">initialize() (pastas.model.Model method)</a>
   </dt>
 
   </dl></td>
@@ -316,7 +340,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.read.html#pasta.read.knmidata.KnmiStation">KnmiStation (class in pasta.read.knmidata)</a>
+  <dt><a href="pastas.read.html#pastas.read.knmidata.KnmiStation">KnmiStation (class in pastas.read.knmidata)</a>
   </dt>
 
   </dl></td>
@@ -326,7 +350,13 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Linear">Linear (class in pasta.recharge.recharge_func)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Linear">Linear (class in pastas.recharge.recharge_func)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="pastas.html#pastas.solver.LmfitSolve">LmfitSolve (class in pastas.solver)</a>
   </dt>
 
   </dl></td>
@@ -336,7 +366,25 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.model.Model">Model (class in pasta.model)</a>
+  <dt><a href="pastas.read.html#pastas.read.menydata.MenyData.matlab2datetime">matlab2datetime() (pastas.read.menydata.MenyData method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.read.html#pastas.read.menydata.MenyData">MenyData (class in pastas.read.menydata)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.read.html#pastas.read.menydata.MenyH">MenyH (class in pastas.read.menydata)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="pastas.read.html#pastas.read.menydata.MenyIN">MenyIN (class in pastas.read.menydata)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.model.Model">Model (class in pastas.model)</a>
   </dt>
 
   </dl></td>
@@ -346,7 +394,29 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.tseries.NoiseModel">NoiseModel (class in pasta.tseries)</a>
+  <dt><a href="pastas.html#pastas.tseries.NoiseModel">NoiseModel (class in pastas.tseries)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="pastas.html#pastas.solver.DESolve.objfunction">objfunction() (pastas.solver.DESolve method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="pastas.html#pastas.solver.LmfitSolve.objfunction">(pastas.solver.LmfitSolve method)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="pastas.html#pastas.rfunc.One">One (class in pastas.rfunc)</a>
   </dt>
 
   </dl></td>
@@ -356,89 +426,105 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.pacf">pacf() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.pacf">pacf() (pastas.stats.Statistics method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#module-pasta">pasta (module)</a>
+  <dt><a href="pastas.html#module-pastas">pastas (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#module-pasta.checks">pasta.checks (module)</a>
+  <dt><a href="pastas.html#module-pastas.checks">pastas.checks (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#module-pasta.model">pasta.model (module)</a>
+  <dt><a href="pastas.html#module-pastas.model">pastas.model (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.read.html#module-pasta.read">pasta.read (module)</a>
+  <dt><a href="pastas.read.html#module-pastas.read">pastas.read (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.read.html#module-pasta.read.dinodata">pasta.read.dinodata (module)</a>
+  <dt><a href="pastas.read.html#module-pastas.read.dinodata">pastas.read.dinodata (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.read.html#module-pasta.read.knmidata">pasta.read.knmidata (module)</a>
+  <dt><a href="pastas.read.html#module-pastas.read.knmidata">pastas.read.knmidata (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.read.html#module-pasta.read.read_series">pasta.read.read_series (module)</a>
+  <dt><a href="pastas.read.html#module-pastas.read.menydata">pastas.read.menydata (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.recharge.html#module-pasta.recharge">pasta.recharge (module)</a>
+  <dt><a href="pastas.read.html#module-pastas.read.read_series">pastas.read.read_series (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.recharge.html#module-pasta.recharge.recharge">pasta.recharge.recharge (module)</a>, <a href="pasta.recharge.html#module-pasta.recharge.recharge">[1]</a>
+  <dt><a href="pastas.recharge.html#module-pastas.recharge">pastas.recharge (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.recharge.html#module-pasta.recharge.recharge_func">pasta.recharge.recharge_func (module)</a>
+  <dt><a href="pastas.recharge.html#module-pastas.recharge.recharge">pastas.recharge.recharge (module)</a>, <a href="pastas.recharge.html#module-pastas.recharge.recharge">[1]</a>
+  </dt>
+
+      
+  <dt><a href="pastas.recharge.html#module-pastas.recharge.recharge_func">pastas.recharge.recharge_func (module)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#module-pastas.rfunc">pastas.rfunc (module)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#module-pasta.rfunc">pasta.rfunc (module)</a>
+  <dt><a href="pastas.html#module-pastas.solver">pastas.solver (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#module-pasta.stats">pasta.stats (module)</a>
+  <dt><a href="pastas.html#module-pastas.stats">pastas.stats (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#module-pasta.tseries">pasta.tseries (module)</a>
+  <dt><a href="pastas.html#module-pastas.tseries">pastas.tseries (module)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.pearson">pearson() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.pearson">pearson() (pastas.stats.Statistics method)</a>
   </dt>
 
       
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Percolation">Percolation (class in pasta.recharge.recharge_func)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge.perc">perc() (in module pastas.recharge.recharge)</a>, <a href="pastas.recharge.html#pastas.recharge.recharge.perc">[1]</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.model.Model.plot">plot() (pasta.model.Model method)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Percolation">Percolation (class in pastas.recharge.recharge_func)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.plot_diagnostics">plot_diagnostics() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.plot">plot() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.model.Model.plot_results">plot_results() (pasta.model.Model method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.plot_decomposition">plot_decomposition() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.plot_statistics">plot_statistics() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.plot_diagnostics">plot_diagnostics() (pastas.stats.Statistics method)</a>
   </dt>
 
       
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Preferential">Preferential (class in pasta.recharge.recharge_func)</a>
+  <dt><a href="pastas.html#pastas.model.Model.plot_results">plot_results() (pastas.model.Model method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge.pref">pref() (in module pastas.recharge.recharge)</a>, <a href="pastas.recharge.html#pastas.recharge.recharge.pref">[1]</a>
+  </dt>
+
+      
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Preferential">Preferential (class in pastas.recharge.recharge_func)</a>
   </dt>
 
   </dl></td>
@@ -448,33 +534,37 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.r_corrected">r_corrected() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.r_corrected">r_corrected() (pastas.stats.Statistics method)</a>
   </dt>
 
       
-  <dt><a href="pasta.read.html#pasta.read.read_series.ReadSeries.rd2wgs">rd2wgs() (pasta.read.read_series.ReadSeries method)</a>
+  <dt><a href="pastas.read.html#pastas.read.read_series.ReadSeries.rd2wgs">rd2wgs() (pastas.read.read_series.ReadSeries method)</a>
   </dt>
 
       
-  <dt><a href="pasta.read.html#pasta.read.knmidata.KnmiStation.readdata">readdata() (pasta.read.knmidata.KnmiStation method)</a>
+  <dt><a href="pastas.read.html#pastas.read.knmidata.KnmiStation.readdata">readdata() (pastas.read.knmidata.KnmiStation method)</a>
   </dt>
 
       
-  <dt><a href="pasta.read.html#pasta.read.read_series.ReadSeries">ReadSeries (class in pasta.read.read_series)</a>
+  <dt><a href="pastas.read.html#pastas.read.read_series.ReadSeries">ReadSeries (class in pastas.read.read_series)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.tseries.Recharge">Recharge (class in pasta.tseries)</a>
+  <dt><a href="pastas.html#pastas.tseries.Recharge">Recharge (class in pastas.tseries)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.model.Model.residuals">residuals() (pasta.model.Model method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.residuals">residuals() (pastas.model.Model method)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.rmse">rmse() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.stats.Statistics.rmse">rmse() (pastas.stats.Statistics method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.read.html#pastas.read.menydata.MenyData.roundTime">roundTime() (pastas.read.menydata.MenyData method)</a>
   </dt>
 
   </dl></td>
@@ -484,149 +574,169 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.tseries.Constant.set_init_parameters">set_init_parameters() (pasta.tseries.Constant method)</a>
+  <dt><a href="pastas.html#pastas.tseries.Constant.set_init_parameters">set_init_parameters() (pastas.tseries.Constant method)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="pasta.html#pasta.tseries.NoiseModel.set_init_parameters">(pasta.tseries.NoiseModel method)</a>
+  <dt><a href="pastas.html#pastas.tseries.NoiseModel.set_init_parameters">(pastas.tseries.NoiseModel method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.tseries.Recharge.set_init_parameters">(pasta.tseries.Recharge method)</a>
+  <dt><a href="pastas.html#pastas.tseries.Recharge.set_init_parameters">(pastas.tseries.Recharge method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.tseries.Tseries.set_init_parameters">(pasta.tseries.Tseries method)</a>
+  <dt><a href="pastas.html#pastas.tseries.Tseries.set_init_parameters">(pastas.tseries.Tseries method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.tseries.Well.set_init_parameters">(pasta.tseries.Well method)</a>
+  <dt><a href="pastas.html#pastas.tseries.Tseries2.set_init_parameters">(pastas.tseries.Tseries2 method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.tseries.Well.set_init_parameters">(pastas.tseries.Well method)</a>
   </dt>
 
       </dl></dd>
       
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Combination.set_parameters">set_parameters() (pasta.recharge.recharge_func.Combination method)</a>
+  <dt><a href="pastas.html#pastas.tseries.TseriesBase.set_initial">set_initial() (pastas.tseries.TseriesBase method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.tseries.TseriesBase.set_max">set_max() (pastas.tseries.TseriesBase method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.tseries.TseriesBase.set_min">set_min() (pastas.tseries.TseriesBase method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Combination.set_parameters">set_parameters() (pastas.recharge.recharge_func.Combination method)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Linear.set_parameters">(pasta.recharge.recharge_func.Linear method)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Linear.set_parameters">(pastas.recharge.recharge_func.Linear method)</a>
   </dt>
 
         
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Percolation.set_parameters">(pasta.recharge.recharge_func.Percolation method)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Percolation.set_parameters">(pastas.recharge.recharge_func.Percolation method)</a>
   </dt>
 
         
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Preferential.set_parameters">(pasta.recharge.recharge_func.Preferential method)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Preferential.set_parameters">(pastas.recharge.recharge_func.Preferential method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.rfunc.Exponential.set_parameters">(pasta.rfunc.Exponential method)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Exponential.set_parameters">(pastas.rfunc.Exponential method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.rfunc.Gamma.set_parameters">(pasta.rfunc.Gamma method)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Gamma.set_parameters">(pastas.rfunc.Gamma method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.rfunc.Hantush.set_parameters">(pasta.rfunc.Hantush method)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Hantush.set_parameters">(pastas.rfunc.Hantush method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.rfunc.Theis.set_parameters">(pasta.rfunc.Theis method)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Theis.set_parameters">(pastas.rfunc.Theis method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.tseries.Constant.set_parameters">(pasta.tseries.Constant method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.html#pasta.tseries.NoiseModel.set_parameters">(pasta.tseries.NoiseModel method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.html#pasta.tseries.TseriesBase.set_parameters">(pasta.tseries.TseriesBase method)</a>
+  <dt><a href="pastas.html#pastas.tseries.NoiseModel.set_parameters">(pastas.tseries.NoiseModel method)</a>
   </dt>
 
       </dl></dd>
       
-  <dt><a href="pasta.html#pasta.model.Model.simulate">simulate() (pasta.model.Model method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Combination.simulate">(pasta.recharge.recharge_func.Combination method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Linear.simulate">(pasta.recharge.recharge_func.Linear method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Percolation.simulate">(pasta.recharge.recharge_func.Percolation method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.recharge.html#pasta.recharge.recharge_func.Preferential.simulate">(pasta.recharge.recharge_func.Preferential method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.html#pasta.tseries.Constant.simulate">(pasta.tseries.Constant method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.html#pasta.tseries.NoiseModel.simulate">(pasta.tseries.NoiseModel method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.html#pasta.tseries.Recharge.simulate">(pasta.tseries.Recharge method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.html#pasta.tseries.Tseries.simulate">(pasta.tseries.Tseries method)</a>
-  </dt>
-
-        
-  <dt><a href="pasta.html#pasta.tseries.Well.simulate">(pasta.tseries.Well method)</a>
-  </dt>
-
-      </dl></dd>
-      
-  <dt><a href="pasta.html#pasta.tseries.Recharge.simulate_recharge">simulate_recharge() (pasta.tseries.Recharge method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.set_tmin_tmax">set_tmin_tmax() (pastas.model.Model method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.model.Model.solve">solve() (pasta.model.Model method)</a>
-  </dt>
-
-      
-  <dt><a href="pasta.html#pasta.stats.Statistics">Statistics (class in pasta.stats)</a>
-  </dt>
-
-      
-  <dt><a href="pasta.html#pasta.rfunc.Exponential.step">step() (pasta.rfunc.Exponential method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.simulate">simulate() (pastas.model.Model method)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="pasta.html#pasta.rfunc.Gamma.step">(pasta.rfunc.Gamma method)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Combination.simulate">(pastas.recharge.recharge_func.Combination method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.rfunc.Hantush.step">(pasta.rfunc.Hantush method)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Linear.simulate">(pastas.recharge.recharge_func.Linear method)</a>
   </dt>
 
         
-  <dt><a href="pasta.html#pasta.rfunc.Theis.step">(pasta.rfunc.Theis method)</a>
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Percolation.simulate">(pastas.recharge.recharge_func.Percolation method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.recharge.html#pastas.recharge.recharge_func.Preferential.simulate">(pastas.recharge.recharge_func.Preferential method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.tseries.Constant.simulate">(pastas.tseries.Constant method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.tseries.NoiseModel.simulate">(pastas.tseries.NoiseModel method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.tseries.Recharge.simulate">(pastas.tseries.Recharge method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.tseries.Tseries.simulate">(pastas.tseries.Tseries method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.tseries.Tseries2.simulate">(pastas.tseries.Tseries2 method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.tseries.Well.simulate">(pastas.tseries.Well method)</a>
   </dt>
 
       </dl></dd>
       
-  <dt><a href="pasta.html#pasta.stats.Statistics.summary">summary() (pasta.stats.Statistics method)</a>
+  <dt><a href="pastas.html#pastas.model.Model.solve">solve() (pastas.model.Model method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.stats.Statistics.sse">sse() (pastas.stats.Statistics method)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.stats.Statistics">Statistics (class in pastas.stats)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.rfunc.Exponential.step">step() (pastas.rfunc.Exponential method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="pastas.html#pastas.rfunc.Gamma.step">(pastas.rfunc.Gamma method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.rfunc.Hantush.step">(pastas.rfunc.Hantush method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.rfunc.One.step">(pastas.rfunc.One method)</a>
+  </dt>
+
+        
+  <dt><a href="pastas.html#pastas.rfunc.Theis.step">(pastas.rfunc.Theis method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="pastas.html#pastas.stats.Statistics.summary">summary() (pastas.stats.Statistics method)</a>
   </dt>
 
   </dl></td>
@@ -636,17 +746,21 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.rfunc.Theis">Theis (class in pasta.rfunc)</a>
+  <dt><a href="pastas.html#pastas.rfunc.Theis">Theis (class in pastas.rfunc)</a>
   </dt>
 
       
-  <dt><a href="pasta.html#pasta.tseries.Tseries">Tseries (class in pasta.tseries)</a>
+  <dt><a href="pastas.html#pastas.tseries.Tseries">Tseries (class in pastas.tseries)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.tseries.TseriesBase">TseriesBase (class in pasta.tseries)</a>
+  <dt><a href="pastas.html#pastas.tseries.Tseries2">Tseries2 (class in pastas.tseries)</a>
+  </dt>
+
+      
+  <dt><a href="pastas.html#pastas.tseries.TseriesBase">TseriesBase (class in pastas.tseries)</a>
   </dt>
 
   </dl></td>
@@ -656,7 +770,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="pasta.html#pasta.tseries.Well">Well (class in pasta.tseries)</a>
+  <dt><a href="pastas.html#pastas.tseries.Well">Well (class in pastas.tseries)</a>
   </dt>
 
   </dl></td>
@@ -680,17 +794,16 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
-        <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="examples.html">Examples</a>|&nbsp;</li>
-       <li><a href="content.html">Documentation </a> |&nbsp;</li>
-       <li><a href="developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

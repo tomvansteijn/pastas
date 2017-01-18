@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Examples &mdash; PASTA 0.0.1 documentation</title>
+    <title>Examples &#8212; PASTA 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -28,7 +28,8 @@
   </head>
   <body role="document">
 <div class="header">
-<a href="index.html"><img src="_static/logo.png" border="0" alt="PASTA Logo" height="100px"></a>
+<a href="index.html"><img src="_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
 </div>
 
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,11 +42,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
-        <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="#">Examples</a>|&nbsp;</li>
-       <li><a href="content.html">Documentation </a> |&nbsp;</li>
-       <li><a href="developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
@@ -54,16 +54,37 @@
       <div class="sphinxsidebar">
           <div class="sphinxsidebarwrapper">
               <h3><a href="#">Project Info</a></h3>
-              <p>Version:<b> 0.0.1 </b></p>
-              <a href="https://travis-ci.org/pastas/pasta"><img
-        src="https://travis-ci.org/pastas/pasta.svg?branch=master" border="0"
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
         alt="Travis Status">
               </a>
+
+
           </div>
       </div>
     
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#short-example">Short Example</a></li>
+</ul>
+</li>
+</ul>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -74,14 +95,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -105,6 +123,21 @@ Notebook is available at the <a class="reference external" href="https://github.
 <li class="toctree-l1"><a class="reference internal" href="examples/3_recharge_series.html">Recharge Example</a></li>
 </ul>
 </div>
+<div class="section" id="short-example">
+<h2>Short Example<a class="headerlink" href="#short-example" title="Permalink to this headline">¶</a></h2>
+<p>Examples of a short script to simulate groundwater levels:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ml</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">oseries</span><span class="p">)</span>
+<span class="n">ts1</span> <span class="o">=</span> <span class="n">Tseries2</span><span class="p">([</span><span class="n">rain</span><span class="p">,</span> <span class="n">evap</span><span class="p">],</span> <span class="n">Gamma</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;recharge&#39;</span><span class="p">)</span>
+<span class="n">ml</span><span class="o">.</span><span class="n">addtseries</span><span class="p">(</span><span class="n">ts1</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">()</span>
+<span class="n">ml</span><span class="o">.</span><span class="n">addtseries</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">NoiseModel</span><span class="p">()</span>
+<span class="n">ml</span><span class="o">.</span><span class="n">addnoisemodel</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">ml</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span class="n">ml</span><span class="o">.</span><span class="n">plot_results</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -124,17 +157,16 @@ Notebook is available at the <a class="reference external" href="https://github.
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="index.html">Home</a>|&nbsp;</li>
-        <li><a href="search.html">Search</a>|&nbsp;</li>
         <li><a href="#">Examples</a>|&nbsp;</li>
-       <li><a href="content.html">Documentation </a> |&nbsp;</li>
-       <li><a href="developers.html">Developers </a> |&nbsp;</li>
-
+        <li><a href="content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="search.html">Search</a>|&nbsp;</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pastas.read.dinodata &#8212; PASTA 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PASTA 0.0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+<div class="header">
+<a href="../../../index.html"><img src="../../../_static/logo.png" border="0" alt="PASTAS Logo"
+    height="100px"></a>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+
+<div class="sidebar">
+      <div class="sphinxsidebar">
+          <div class="sphinxsidebarwrapper">
+              <h3><a href="#">Project Info</a></h3>
+              <a href="https://travis-ci.org/pastas/pastas"><img
+        src="https://travis-ci.org/pastas/pastas.svg?branch=master" border="0"
+        alt="Travis Status">
+              </a><br>
+              <a href="https://pypi.python.org/pypi/pastas"><img
+        src="https://img.shields.io/pypi/v/pastas.svg" border="0"
+        alt="Pypi Version">
+              </a><br>
+              <a href="https://mit-license.org/"><img
+        src="https://img.shields.io/pypi/l/pastas.svg" border="0"
+        alt="License">
+              </a><br>
+              <a href="https://github.com/pastas/pastas"><img
+        src="https://img.shields.io/github/release/qubyte/pastas.svg" border="0"
+        alt="Travis Status">
+              </a>
+
+
+          </div>
+      </div>
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+</div>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pastas.read.dinodata</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@author: ruben</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="DinoGrondwaterstand"><a class="viewcode-back" href="../../../pastas.read.html#pastas.read.dinodata.DinoGrondwaterstand">[docs]</a><span class="k">class</span> <span class="nc">DinoGrondwaterstand</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="c1"># lees de header</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">line</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]:</span>
+                <span class="n">propval</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="n">propval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">propval</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">propval</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">val</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">propval</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> \
+                          <span class="n">propval</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">header</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+            <span class="c1"># lees gat</span>
+            <span class="k">while</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+            <span class="c1"># lees referentieniveaus</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">line</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]:</span>
+                <span class="n">propval</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="n">propval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">propval</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">propval</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">ref</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+            <span class="c1"># lees gat</span>
+            <span class="k">while</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+            <span class="c1"># lees meta-informatie</span>
+            <span class="n">metaList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">properties</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">line</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]:</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)):</span>
+                    <span class="n">meta</span><span class="p">[</span><span class="n">properties</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">metaList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+            <span class="c1"># lees gat</span>
+            <span class="k">while</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">titel</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="s1">&#39;&#39;</span> <span class="ow">in</span> <span class="n">titel</span><span class="p">:</span>
+                <span class="n">titel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+            <span class="c1"># lees reeksen</span>
+            <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="c1"># Validate if titles are valid names</span>
+                <span class="n">validator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">_iotools</span><span class="o">.</span><span class="n">NameValidator</span><span class="p">()</span>
+                <span class="n">titel</span> <span class="o">=</span> <span class="n">validator</span><span class="p">(</span><span class="n">titel</span><span class="p">)</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">titel</span><span class="p">))</span>
+                <span class="n">dtype</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;S11&quot;</span>
+                <span class="n">dtype</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span>
+                <span class="n">dtype</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;S10&quot;</span>
+                <span class="n">dtype</span><span class="p">[</span><span class="n">titel</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Bijzonderheid&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">object</span>
+                <span class="n">dtype</span><span class="p">[</span><span class="n">titel</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Opmerking&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">object</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">titel</span><span class="p">,</span> <span class="n">dtype</span><span class="p">))</span>
+
+                <span class="n">usecols</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">titel</span><span class="p">))</span>
+                <span class="c1"># # usecols.remove(2)</span>
+                <span class="n">measurements</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">titel</span><span class="p">,</span>
+                                           <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Peildatum&#39;</span><span class="p">],</span>
+                                           <span class="n">index_col</span> <span class="o">=</span> <span class="s1">&#39;Peildatum&#39;</span><span class="p">,</span>
+                                           <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                           <span class="n">usecols</span><span class="o">=</span><span class="n">usecols</span><span class="p">)</span>
+                <span class="n">ts</span> <span class="o">=</span> <span class="n">measurements</span><span class="p">[</span><span class="s1">&#39;Stand_cm_tov_NAP&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+                <span class="c1">#</span>
+                <span class="c1"># measurements = np.genfromtxt(f, delimiter=&#39;,&#39;,</span>
+                <span class="c1">#                              dtype=None,</span>
+                <span class="c1">#                              usecols=range(0, len(titel)),</span>
+                <span class="c1">#                              names=titel,</span>
+                <span class="c1">#                              missing_values=[&#39;&#39;])</span>
+                <span class="c1"># values = measurements[&#39;Stand_cm_tov_NAP&#39;] / float(100)</span>
+                <span class="c1"># values[values == -0.01] = np.NAN</span>
+
+                <span class="c1"># measurements = np.genfromtxt(fname, delimiter=&#39;,&#39;, dtype=dtype,</span>
+                <span class="c1">#                              names=titel, usecols=usecols)</span>
+                <span class="c1">#values = measurements[&#39;Stand_cm_tov_NAP&#39;] / 100</span>
+
+                <span class="c1"># %% zet de ingelezen data om in een reeks</span>
+                <span class="c1"># if measurements[&#39;Stand_cm_tov_NAP&#39;].dtype == np.dtype(&#39;bool&#39;):</span>
+                <span class="c1">#     # wanneer bleek dat het allemaal lege waarden waren</span>
+                <span class="c1">#     if values.size == 1:</span>
+                <span class="c1">#         values = np.NAN</span>
+                <span class="c1">#     else:</span>
+                <span class="c1">#         values[:] = np.NAN</span>
+
+                <span class="c1"># if measurements[&#39;Peildatum&#39;].size == 1:</span>
+                <span class="c1">#     datum = pd.to_datetime(</span>
+                <span class="c1">#         measurements[&#39;Peildatum&#39;].item(), dayfirst=True)</span>
+                <span class="c1">#     ts = pd.Series([values], [datum])</span>
+                <span class="c1"># else:</span>
+                <span class="c1">#     datum = pd.to_datetime(measurements[&#39;Peildatum&#39;])</span>
+                <span class="c1">#     ts = pd.Series(values, datum)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">measurements</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">ts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">()</span>
+
+            <span class="c1"># %% kies welke invoer opgeslagen wordt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="n">metaList</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">locatie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Locatie&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filternummer</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Filternummer&#39;</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;X-coordinaat&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Y-coordinaat&#39;</span><span class="p">])</span>
+                <span class="n">meetpunt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Meetpunt (cm t.o.v. NAP)&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">meetpunt</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">meetpunt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">meetpunt</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">meetpunt</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+                <span class="n">maaiveld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Maaiveld (cm t.o.v. NAP)&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">maaiveld</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">maaiveld</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">maaiveld</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">maaiveld</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+                <span class="n">bovenkant_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span>
+                    <span class="s1">&#39;Bovenkant filter (cm t.o.v. NAP)&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">bovenkant_filter</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bovenkant_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bovenkant_filter</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">bovenkant_filter</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">onderkant_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span>
+                    <span class="s1">&#39;Onderkant filter (cm t.o.v. NAP)&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">onderkant_filter</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">onderkant_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">onderkant_filter</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onderkant_filter</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># de metadata is leeg</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">locatie</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filternummer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">meetpunt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">maaiveld</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bovenkant_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">onderkant_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">measurements</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stand</span> <span class="o">=</span> <span class="n">ts</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Home</a>|&nbsp;</li>
+        <li><a href="../../../examples.html">Examples</a>|&nbsp;</li>
+        <li><a href="../../../content.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../developers.html">Developers </a> |&nbsp;</li>
+        <li><a href="../../../search.html">Search</a>|&nbsp;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, M. Bakker, R.A. Collenteur, R. Calje, F. Schaars.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>
