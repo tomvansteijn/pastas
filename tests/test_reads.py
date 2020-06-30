@@ -11,6 +11,11 @@ def test_read_dino():
     return
 
 
+def test_read_dino_river_gauge():
+    ps.read_dino('tests/data/P49F0004.csv')
+    return
+
+
 def test_read_knmi():
     ps.read_knmi('tests/data/KNMI_Bilt.txt', "EV24")
     return
