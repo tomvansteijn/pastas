@@ -119,10 +119,10 @@ class Plotting:
             tuple of size 2 to determine the figure size in inches.
         split: bool, optional
             Split the stresses in multiple stresses when possible. Default is
-            True.
+            False.
         adjust_height: bool, optional
             Adjust the height of the graphs, so that the vertical scale of all
-            the graphs on the left is equal
+            the subplots on the left is equal.
 
         Returns
         -------
@@ -159,7 +159,7 @@ class Plotting:
                         ylims.append((contrib.min(), hs.max()))
                 else:
                     ylims.append((hs.min(), hs.max()))
-            hrs = get_height_ratios(ylims)
+            hrs = _get_height_ratios(ylims)
         else:
             hrs = [2] + [1] * (len(contribs) + 1)
 
@@ -197,20 +197,12 @@ class Plotting:
 
         # Stats frame
         ax3 = fig.add_subplot(gs[0:2, 1])
-        ax3.set_title('Model Information', loc='left')
+        ax3.set_title('Model Parameters', loc='left')
 
         # Add a row for each stressmodel
-        i = 0
+        rmax = 0  # tmax of the step response
         axb = None
-        for sm_name in self.ml.stressmodels:
-            # get the step-response
-            step = self.ml.get_step_response(sm_name, add_0=True)
-            if i == 0:
-                rmax = step.index.max()
-            else:
-                rmax = max(rmax, step.index.max())
-            step_row = i + 2
-
+        for i, sm_name in enumerate(self.ml.stressmodels):
             # plot the contribution
             sm = self.ml.stressmodels[sm_name]
             nsplit = sm.get_nsplit()
@@ -220,10 +212,8 @@ class Plotting:
                     contribs[i].plot(ax=ax, x_compat=True)
                     ax.legend(loc=(0, 1), ncol=3, frameon=False)
                     if adjust_height:
-                        ax.set_ylim(ylims[2 + i])
+                        ax.set_ylim(ylims[i + 2])
                         ax.grid(True)
-                    i = i + 1
-
             else:
                 ax = fig.add_subplot(gs[i + 2, 0], sharex=ax1)
                 contribs[i].plot(ax=ax, x_compat=True)
@@ -233,15 +223,17 @@ class Plotting:
                 plt.title("Stresses: %s" % title, loc="right")
                 ax.legend(loc=(0, 1), ncol=3, frameon=False)
                 if adjust_height:
-                    ax.set_ylim(ylims[2 + i])
+                    ax.set_ylim(ylims[i + 2])
                     ax.grid(True)
-                i = i + 1
 
-            # plot the step-reponse
-            axb = fig.add_subplot(gs[step_row, 1])
-            step.plot(ax=axb)
-            if adjust_height:
-                axb.grid(True)
+            # plot the step reponse
+            step = self.ml.get_step_response(sm_name, add_0=True)
+            if step is not None:
+                rmax = max(rmax, step.index.max())
+                axb = fig.add_subplot(gs[i + 2, 1])
+                step.plot(ax=axb)
+                if adjust_height:
+                    axb.grid(True)
 
         # xlim sets minorticks back after plots:
         ax1.minorticks_off()
@@ -250,22 +242,19 @@ class Plotting:
         if axb is not None:
             axb.set_xlim(0, rmax)
 
-        fig.tight_layout(pad=0.0)
+        fig.tight_layout()
 
         # Draw parameters table
-        parameters = self.ml.parameters.copy()
-        parameters['name'] = parameters.index
-        cols = ["name", "optimal", "stderr"]
-        parameters = parameters.loc[:, cols]
-        for name, vals in parameters.loc[:, cols].iterrows():
-            parameters.loc[name, "optimal"] = '{:.2f}'.format(vals.optimal)
-            stderr_perc = np.abs(np.divide(vals.stderr, vals.optimal) * 100)
-            parameters.loc[name, "stderr"] = '{:.1f}{}'.format(stderr_perc,
-                                                               "\u0025")
+        p = self.ml.parameters.copy().loc[:, ["name", "optimal", "stderr"]]
+        p.loc[:, 'name'] = p.index
+        p.loc[:, "stderr"] = np.abs(np.divide(p.loc[:, "stderr"],
+                                              p.loc[:, "optimal"]) * 100)
+        p.loc[:, "stderr"] = p.loc[:, "stderr"].apply("{:.2f}".format)
+        p.loc[:, "optimal"] = p.loc[:, "optimal"].apply("{:.2f}".format)
+
         ax3.axis('off')
-        # loc='upper center'
-        ax3.table(bbox=(0., 0., 1.0, 1.0), cellText=parameters.values,
-                  colWidths=[0.5, 0.25, 0.25], colLabels=cols)
+        ax3.table(bbox=(0., 0., 1.0, 1.0), cellText=p.values,
+                  colWidths=[0.5, 0.25, 0.25], colLabels=p.columns)
 
         return fig.axes
 
@@ -339,7 +328,7 @@ class Plotting:
                     ylims[i] = (np.mean(ylim) - min_ylim_diff / 2,
                                 np.mean(ylim) + min_ylim_diff / 2)
         # determine height ratios
-        height_ratios = get_height_ratios(ylims)
+        height_ratios = _get_height_ratios(ylims)
 
         nrows = len(contribs) + 1
         if axes is None:
@@ -1240,7 +1229,7 @@ class TrackSolve:
         self.fig.canvas.draw()
 
 
-def get_height_ratios(ylims):
+def _get_height_ratios(ylims):
     height_ratios = []
     for ylim in ylims:
         hr = ylim[1] - ylim[0]
